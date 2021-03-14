@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workplace_opinion_app/widgest/list.dart';
+import 'package:workplace_opinion_app/widgets/list.dart';
 
 class Home extends StatefulWidget{
   @override
