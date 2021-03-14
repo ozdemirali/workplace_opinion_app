@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/widgest/list.dart';
 
 class Home extends StatefulWidget{
   @override
@@ -45,9 +46,9 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: tabController,
         children: <Widget>[
-          Text("İşler"),
-          Text("Bitenler"),
-          Text("Search"),
+          Listeleme(),
+          Listeleme(),
+          Listeleme(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
