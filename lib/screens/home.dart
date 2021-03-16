@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
+import 'package:workplace_opinion_app/widgets/showToDialog.dart';
 
 class Home extends StatefulWidget{
   @override
@@ -54,6 +55,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           print("Ekle");
+          showToDialog(context);
         },
         tooltip: "Kayıt Ekle",
         child: Icon(Icons.add),
