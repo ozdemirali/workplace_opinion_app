@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/widgets/showToForm.dart';
+
+final _formKey = GlobalKey<FormState>();
 
 showToDialog(BuildContext context) async{
 
@@ -24,9 +27,7 @@ showToDialog(BuildContext context) async{
                 SizedBox(
                   height: 10,
                 ),
-                Text("A"),
-                Text("B"),
-                Text("C")
+                showToForm(_formKey),
               ],
             ),
           ),
@@ -47,7 +48,10 @@ showToDialog(BuildContext context) async{
                 new FlatButton(
                     child:const Text('Kayıt'),
                     onPressed: () {
-                      Navigator.pop(context);
+                      if(_formKey.currentState.validate()){
+                        Navigator.pop(context);
+                      }
+
                     }),
               ],
             ),
