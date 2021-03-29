@@ -131,8 +131,16 @@ class TypeState extends State<Type>{
   List<String> type=["İlgili","İlgisiz"];
 
   @override
+  void initState(){
+    super.initState();
+    print("---");
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return DropdownButtonFormField<String>(
       value: selectType,
       items: type.map((label)=>DropdownMenuItem(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
+import 'package:workplace_opinion_app/widgets/showToTab.dart';
 
 class Home extends StatefulWidget{
   @override
@@ -16,7 +17,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   @override
   void initState() {
-   tabController=new TabController(length: 3,initialIndex: 0, vsync: this);
+   tabController=new TabController(length: 4,initialIndex: 0, vsync: this);
     super.initState();
   }
 
@@ -30,9 +31,10 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
           controller: tabController,
           indicatorColor: Colors.white,
           tabs: <Widget>[
-            Tab(text: "İşyerleri",icon: Icon(Icons.place),),
-            Tab(text: "İş Yeri Atama",icon: Icon(Icons.assignment),),
-            Tab(text:"İş Yeri Bulma",icon: Icon(Icons.find_in_page),),
+            Tab(text: "Atanan\nİşyerleri",icon: Icon(Icons.place),),
+            Tab(text: "Stajer\nAtama",icon: Icon(Icons.account_box),),
+            Tab(text: "Kayıtlı\nYerler", icon: Icon(Icons.assignment),),
+            Tab(text:"İş Yeri\nBulma",icon: Icon(Icons.find_in_page),),
           ],
         ),
         actions: <Widget>[
@@ -47,6 +49,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: tabController,
         children: <Widget>[
+          Listeleme(),
           Listeleme(),
           Listeleme(),
           Listeleme(),
