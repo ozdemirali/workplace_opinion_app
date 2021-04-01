@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "482374780182",
+    "project_id": "workplace-fcab7",
+    "storage_bucket": "workplace-fcab7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482374780182:android:afac7ff498cff1425a3c37",
+        "android_client_info": {
+          "package_name": "meb.workplace_opinion_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "482374780182-5b13j498rl7rbvhkn9lp2a7e12o7cv3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-X6msAgzQpUsVrn2dE4E9mdW6fv3lj0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "482374780182-5b13j498rl7rbvhkn9lp2a7e12o7cv3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
