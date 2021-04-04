@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/mixin/validation_mixin.dart';
+import 'package:workplace_opinion_app/services/auth.dart';
 
 class Login extends StatefulWidget{
+  Login({this.auth,this.loginCallback});
+
+  final BaseAuth auth;
+  final VoidCallback loginCallback;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -143,7 +149,7 @@ class LoginState extends State<Login> with ValidationMixin{
             onPressed: (){
               if(formKey.currentState.validate()){
                 formKey.currentState.save();
-                //submit();
+                submit();
               }
               else{
                 setState(() {
@@ -155,5 +161,57 @@ class LoginState extends State<Login> with ValidationMixin{
       ),
     );
   }
+
+  Widget showErrorMessage(){
+    if(errorMessage.length>0 && errorMessage!=null){
+      return new Padding(
+        padding:const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+        child: new Text(
+          errorMessage,
+          style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.grey,
+              height: 1.0,
+              fontWeight: FontWeight.bold),
+        ),
+      );
+    }else{
+      return new Container(
+        height: 0.0,
+      );
+    }
+  }
+
+
+  void submit() async{
+    setState(() {
+      errorMessage = "";
+      isLoading=true;
+    });
+    String userId="";
+    //print("Email ..: $email");
+    //print("Password : $password");
+    try{
+      userId = await widget.auth.signIn(email, password);
+      //print("Signed in: $userId");
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (userId.length > 0 && userId != null) {
+        widget.loginCallback();
+      }
+    }
+    catch(e){
+      //print("Error : $e");
+      setState(() {
+        isLoading = false;
+        errorMessage=e.message;
+        formKey.currentState.reset();
+      });
+    }
+  }
+
 
 }

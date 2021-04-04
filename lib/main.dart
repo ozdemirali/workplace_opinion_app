@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/screens/login.dart';
+import 'package:workplace_opinion_app/screens/root.dart';
+import 'package:workplace_opinion_app/services/auth.dart';
 
 import 'screens/home.dart';
 
@@ -15,7 +17,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: Home(),
+      home: Root(
+        auth: new Auth(),
+      ),
     );
   }
 }

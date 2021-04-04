@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/services/auth.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
 import 'package:workplace_opinion_app/widgets/showToTab.dart';
 
 class Home extends StatefulWidget{
+  Home({this.auth,this.userId,this.logoutCallback});
+
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -42,6 +49,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
               child:new Text("Çıkış", style: new TextStyle(fontSize: 17.0,color: Colors.white), ),
               onPressed: (){
                 print("Çıkış");
+                signOut();
               }
           )
         ],
@@ -64,6 +72,15 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      //print(e);
+    }
   }
 
 }
