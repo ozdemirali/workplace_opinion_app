@@ -69,6 +69,7 @@ class LoginState extends State<Login> with ValidationMixin{
             showEmailInput(),
             showPasswordInput(),
             showLoginButton(),
+            showLoginGoogleButton()
           ],
         ),
       ),
@@ -161,6 +162,35 @@ class LoginState extends State<Login> with ValidationMixin{
       ),
     );
   }
+  Widget showLoginGoogleButton(){
+    return new Padding(
+      padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+      child: SizedBox(
+        height: 40.0,
+        child: new RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10.0)
+            ),
+            color: Colors.teal,
+            child: new Text("Sign in whit Google",
+                style:new TextStyle(fontSize: 20.0, color: Colors.white)),
+            onPressed: ()async{
+              if(true){
+                //formKey.currentState.save();
+                //signInWithGoogle(email,password);
+                submitGoogle();
+              }
+              else{
+                setState(() {
+                  errorMessage="";
+                });
+              }
+
+            }),
+      ),
+    );
+  }
 
   Widget showErrorMessage(){
     if(errorMessage.length>0 && errorMessage!=null){
@@ -193,6 +223,36 @@ class LoginState extends State<Login> with ValidationMixin{
     //print("Password : $password");
     try{
       userId = await widget.auth.signIn(email, password);
+      //print("Signed in: $userId");
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (userId.length > 0 && userId != null) {
+        widget.loginCallback();
+      }
+    }
+    catch(e){
+      //print("Error : $e");
+      setState(() {
+        isLoading = false;
+        errorMessage=e.message;
+        formKey.currentState.reset();
+      });
+    }
+  }
+
+  void submitGoogle() async{
+    setState(() {
+      errorMessage = "";
+      isLoading=true;
+    });
+    String userId="";
+    //print("Email ..: $email");
+    //print("Password : $password");
+    try{
+      userId = await widget.auth.signInGoogle();
       //print("Signed in: $userId");
 
       setState(() {
