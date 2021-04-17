@@ -1,4 +1,5 @@
-
+import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 TextEditingController txtWorkplaceName=new TextEditingController();
@@ -8,7 +9,9 @@ TextEditingController txtAuthorizedPerson=new TextEditingController();
 TextEditingController txtExplanation=new TextEditingController();
 
 String selectType="İlgili";
+String selectTeacher;
 
+final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 
 
@@ -18,6 +21,7 @@ Widget showToForm(GlobalKey _formKey){
     child:Column(
       children: <Widget>[
         workplaceName(txtWorkplaceName),
+        Teacher(),
         Type(),
         phone(txtPhone),
         address(txtAddress),
@@ -119,6 +123,76 @@ Widget explanation(TextEditingController txtExplanation){
   );
 }
 
+//Get all teacher from Realtime Database in Firebase
+
+class Teacher extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return TeacherState();
+  }
+}
+
+class TeacherState extends State<Teacher>{
+  List<String> teacher=new List();
+  List<String> test=["Ali","Veli"];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //print("---name");
+    _database
+        .reference()
+        .child("user").orderByKey()
+        .once()
+        .then((DataSnapshot snapshot){
+          snapshot.value.forEach((value){
+            if(value!=null){
+              print(value["name"]);
+              teacher.add(value["name"].trim()+" "+value["surname"].trim());
+            }
+          });
+    });
+  }
+  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds: 1),()=>
+      teacher.length.toString()
+  );
+
+  
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return FutureBuilder<String>(
+      future: callAsyncFetch(),
+      builder: (context,AsyncSnapshot<String> snapshot){
+        if(snapshot.data!="0"){
+          print(teacher);
+          return DropdownButtonFormField<String>(
+            value: selectTeacher,
+            items: teacher
+                  .map((label)=>DropdownMenuItem(
+              child: Text(label),
+              value: label,
+            )).toList(),
+            onChanged: (value){
+              setState(() {
+                selectTeacher=value;
+                print (selectTeacher);
+              });
+            },
+          );
+        }else
+          {
+            return CircularProgressIndicator();
+          }
+      },
+    );
+  }
+}
+
+
+
+
 class Type extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -133,7 +207,7 @@ class TypeState extends State<Type>{
   @override
   void initState(){
     super.initState();
-    print("---");
+    //print("---");
 
   }
 

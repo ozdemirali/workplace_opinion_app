@@ -65,7 +65,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          print("Ekle");
+          //print("Ekle");
           showToDialog(context);
         },
         tooltip: "Kayıt Ekle",

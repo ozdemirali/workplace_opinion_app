@@ -12,7 +12,7 @@ showToDialog(BuildContext context) async{
       return AlertDialog(
         contentPadding: EdgeInsets.only(left: 5,right: 5),
         title: Center(
-          child: Text("Alert Box"),
+          child: Text("Yeni işyeri Ekle"),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
