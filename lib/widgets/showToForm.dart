@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/models/workplace.dart';
 
 TextEditingController txtWorkplaceName=new TextEditingController();
 TextEditingController txtPhone=new TextEditingController();
@@ -8,8 +9,9 @@ TextEditingController txtAddress=new TextEditingController();
 TextEditingController txtAuthorizedPerson=new TextEditingController();
 TextEditingController txtExplanation=new TextEditingController();
 
-String selectType="İlgili";
+String selectType;
 String selectTeacher;
+String selectBranch;
 
 final FirebaseDatabase _database=FirebaseDatabase.instance;
 
@@ -21,8 +23,9 @@ Widget showToForm(GlobalKey _formKey){
     child:Column(
       children: <Widget>[
         workplaceName(txtWorkplaceName),
-        Teacher(),
+        //Teacher(),
         Type(),
+        //Branch(),
         phone(txtPhone),
         address(txtAddress),
         authorizedPerson(txtAuthorizedPerson),
@@ -134,7 +137,6 @@ class Teacher extends StatefulWidget{
 
 class TeacherState extends State<Teacher>{
   List<String> teacher=new List();
-  List<String> test=["Ali","Veli"];
 
   @override
   void initState() {
@@ -166,7 +168,7 @@ class TeacherState extends State<Teacher>{
       future: callAsyncFetch(),
       builder: (context,AsyncSnapshot<String> snapshot){
         if(snapshot.data!="0"){
-          print(teacher);
+          //print(teacher);
           return DropdownButtonFormField<String>(
             value: selectTeacher,
             items: teacher
@@ -183,6 +185,7 @@ class TeacherState extends State<Teacher>{
           );
         }else
           {
+           //print(teacher);
             return CircularProgressIndicator();
           }
       },
@@ -192,7 +195,7 @@ class TeacherState extends State<Teacher>{
 
 
 
-
+//Get all Type of Workplace
 class Type extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -202,32 +205,122 @@ class Type extends StatefulWidget{
 }
 
 class TypeState extends State<Type>{
-  List<String> type=["İlgili","İlgisiz"];
+  List<String> type=new List();
 
   @override
   void initState(){
     super.initState();
-    //print("---");
+    _database
+        .reference()
+        .child("type").orderByKey()
+        .once()
+        .then((DataSnapshot snapshot){
+          snapshot.value.forEach((value){
+            if(value!=null){
+              type.add(value["name"].trim());
+            }
+          });
+    });
 
   }
+
+  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
+      type.length.toString()
+  );
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    return DropdownButtonFormField<String>(
-      value: selectType,
-      items: type.map((label)=>DropdownMenuItem(
-        child: Text(label),
-        value: label,
-      )).toList(),
-      onChanged: (value){
-        setState(() {
-          selectType=value;
-          print(selectType);
+    return FutureBuilder<String>(
+        future: callAsyncFetch(),
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.data!="0") {
+            return DropdownButtonFormField<String>(
+              value: selectType,
+              items: type
+                  .map((label) => DropdownMenuItem(
+                child: Text(label),
+                value: label,
+              )).toList(),
+              onChanged: (value){
+                setState(() {
+                  selectType=value;
+                });
+              },
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
         });
-      },
-    );
   }
 
+}
+
+//Get all branc of Student
+class Branch extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return BranchState();
+  }
+}
+
+class BranchState extends State<Branch>{
+  List<String> branch=new List();
+
+  @override
+  void initState(){
+    super.initState();
+    _database
+        .reference()
+        .child("branch").orderByKey()
+        .once()
+        .then((DataSnapshot snapshot){
+      snapshot.value.forEach((value){
+        if(value!=null){
+          branch.add(value["name"].trim());
+        }
+      });
+    });
+
+  }
+
+  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
+      branch.length.toString()
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+
+    return FutureBuilder<String>(
+        future: callAsyncFetch(),
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.data!="0") {
+            return DropdownButtonFormField<String>(
+              value: selectBranch,
+              items: branch
+                  .map((label) => DropdownMenuItem(
+                child: Text(label),
+                value: label,
+              )).toList(),
+              onChanged: (value){
+                setState(() {
+                  selectBranch=value;
+                });
+              },
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
+  }
+
+}
+
+
+addNewWorkplace(){
+  Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+  _database.reference().child("workplace").push().set(workplace.toJson());
 }

@@ -49,7 +49,8 @@ showToDialog(BuildContext context) async{
                     child:const Text('Kayıt'),
                     onPressed: () {
                       if(_formKey.currentState.validate()){
-                        Navigator.pop(context);
+                         addNewWorkplace();
+                         Navigator.pop(context);
                       }
 
                     }),
