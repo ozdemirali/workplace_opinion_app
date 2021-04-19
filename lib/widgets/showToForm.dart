@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 TextEditingController txtWorkplaceName=new TextEditingController();
 TextEditingController txtPhone=new TextEditingController();
@@ -58,7 +60,14 @@ Widget phone(TextEditingController txtPhone){
   return TextFormField(
     controller:txtPhone ,
     textCapitalization: TextCapitalization.words,
-    keyboardType: TextInputType.text,
+    keyboardType: TextInputType.number,
+    inputFormatters: [
+      //DateInputFormatter(),
+      //LengthLimitingTextInputFormatter(11),
+      //WhitelistingTextInputFormatter.digitsOnly,
+      //BlacklistingTextInputFormatter.singleLineFormatter,
+      //FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+    ],
     decoration: InputDecoration(
       labelText: "Telefonu",
     ),

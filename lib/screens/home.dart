@@ -3,6 +3,7 @@ import 'package:workplace_opinion_app/services/auth.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
 import 'package:workplace_opinion_app/widgets/showToTab.dart';
+import 'package:workplace_opinion_app/widgets/workplaceList.dart';
 
 class Home extends StatefulWidget{
   Home({this.auth,this.userId,this.logoutCallback});
@@ -59,7 +60,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         children: <Widget>[
           Listeleme(),
           Listeleme(),
-          Listeleme(),
+          WorkplaceList(),
           Listeleme(),
         ],
       ),
