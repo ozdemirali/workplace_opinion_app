@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
@@ -67,7 +68,8 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           //print("Ekle");
-          showToDialog(context);
+          Workplace data;
+          showToDialog(context,data);
         },
         tooltip: "Kayıt Ekle",
         child: Icon(Icons.add),

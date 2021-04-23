@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
+import 'package:workplace_opinion_app/widgets/showToDialog.dart';
 
 class WorkplaceList extends StatefulWidget{
   @override
@@ -114,11 +115,12 @@ class WorkplaceListState extends State<WorkplaceList>{
                       child: Text(""),
                     ),
                     title: Text(_workplaceList[position].name),
-                    subtitle: Text(_workplaceList[position].authorizedPerson +" - " +"0 " + _workplaceList[position].phone.substring(1,4) + " " +
-                        _workplaceList[position].phone.substring(4,7) + " " +_workplaceList[position].phone.substring(7,9)+ " " +_workplaceList[position].phone.substring(9,11)
+                    subtitle: Text(_workplaceList[position].authorizedPerson +" - "+_workplaceList[position].phone
                     ),
                     onTap: (){
                       print("Seçildi");
+                      print(_workplaceList[position]);
+                      showToDialog(context, _workplaceList[position]);
                     },
                   ),
                 ),
@@ -133,6 +135,7 @@ class WorkplaceListState extends State<WorkplaceList>{
   deleteWorkplace(String key) {
     _database.reference().child("workplace").child(key).remove().then((_){});
   }
+
 
 }
 

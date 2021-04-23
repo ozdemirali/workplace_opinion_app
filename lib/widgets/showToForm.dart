@@ -3,23 +3,44 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
-import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 TextEditingController txtWorkplaceName=new TextEditingController();
-TextEditingController txtPhone=new TextEditingController();
+TextEditingController txtPhone=new TextEditingController(text: "12345678");
 TextEditingController txtAddress=new TextEditingController();
 TextEditingController txtAuthorizedPerson=new TextEditingController();
 TextEditingController txtExplanation=new TextEditingController();
 
+var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter: { "#": RegExp(r'[0-9]') });
+
+
 String selectType;
 String selectTeacher;
 String selectBranch;
+String _key;
 
 final FirebaseDatabase _database=FirebaseDatabase.instance;
 
-
-
 Widget showToForm(GlobalKey _formKey){
+  // if(data!=null){
+  //   print("xasd");
+  //   _key=data.key;
+  //   txtWorkplaceName.text=data.name;
+  //   selectType=data.type;
+  //   txtPhone.text=data.phone;
+  //   txtAddress.text=data.address;
+  //   txtAuthorizedPerson.text=data.authorizedPerson;
+  //   txtExplanation.text=data.explanation;
+  // }
+  // else{
+  //   txtWorkplaceName.text="";
+  //   selectType="Web";
+  //   txtPhone.text="";
+  //   txtAddress.text="";
+  //   txtAuthorizedPerson.text="";
+  //   txtExplanation.text="";
+  // }
+
   return Form(
     key:_formKey,
     child:Column(
@@ -32,7 +53,6 @@ Widget showToForm(GlobalKey _formKey){
         address(txtAddress),
         authorizedPerson(txtAuthorizedPerson),
         explanation(txtExplanation),
-
       ],
     ) ,
   );
@@ -60,16 +80,14 @@ Widget phone(TextEditingController txtPhone){
   return TextFormField(
     controller:txtPhone ,
     textCapitalization: TextCapitalization.words,
-    keyboardType: TextInputType.number,
+    keyboardType: TextInputType.numberWithOptions(decimal: true),
     inputFormatters: [
-      //DateInputFormatter(),
-      //LengthLimitingTextInputFormatter(11),
-      //WhitelistingTextInputFormatter.digitsOnly,
-      //BlacklistingTextInputFormatter.singleLineFormatter,
-      //FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+     maskFormatter,
     ],
     decoration: InputDecoration(
-      labelText: "Telefonu",
+      hintText: "0 (999) 999 99 99",
+      hintStyle: TextStyle(fontSize:12),
+      labelText: "Telefon",
     ),
     validator: (value){
       if(value.isEmpty){
@@ -80,6 +98,7 @@ Widget phone(TextEditingController txtPhone){
     textInputAction: TextInputAction.next,
   );
 }
+
 
 Widget address(TextEditingController txtAddress){
   return TextFormField(
@@ -328,8 +347,29 @@ class BranchState extends State<Branch>{
 
 }
 
+addWorkplace(){
+  print("add Workplace");
+  print("asd");
+  Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+  if(_key==null){
+     print("add new data");
+    _database.reference().child("workplace").push().set(workplace.toJson());
+  }
+  else{
+    print("update data");
+    _database.reference().child("workplace").child(_key).set(workplace.toJson());
+  }
+
+}
 
 addNewWorkplace(){
-  Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
-  _database.reference().child("workplace").push().set(workplace.toJson());
+  print(maskFormatter.getUnmaskedText()); // -> 01234567890
+  // Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+  // _database.reference().child("workplace").push().set(workplace.toJson());
+}
+
+updateWorkplace(Workplace data){
+  // if(data!=null){
+  //   _database.reference().child("workplace").child(data.key).set(data.toJson());
+  // }
 }
