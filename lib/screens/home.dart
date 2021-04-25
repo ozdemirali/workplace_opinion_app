@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
+import 'package:workplace_opinion_app/screens/studentPlacement.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
-import 'package:workplace_opinion_app/widgets/showToTab.dart';
 import 'package:workplace_opinion_app/widgets/workplaceList.dart';
 
 class Home extends StatefulWidget{
@@ -34,6 +34,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar:new AppBar(
         title: Text("Ali ÖZDEMİR"),
         bottom: TabBar(
@@ -60,7 +61,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         controller: tabController,
         children: <Widget>[
           Listeleme(),
-          Listeleme(),
+          StudentPlacement(),
           WorkplaceList(),
           Listeleme(),
         ],

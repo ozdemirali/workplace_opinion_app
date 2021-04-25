@@ -2,7 +2,11 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
-import 'package:workplace_opinion_app/widgets/showToForm.dart';
+import 'package:workplace_opinion_app/widgets/address.dart';
+import 'package:workplace_opinion_app/widgets/authorizerPerson.dart';
+import 'package:workplace_opinion_app/widgets/explanation.dart';
+import 'package:workplace_opinion_app/widgets/phone.dart';
+import 'package:workplace_opinion_app/widgets/workplaceName.dart';
 
 TextEditingController txtWorkplaceName=new TextEditingController();
 TextEditingController txtPhone=new TextEditingController(text: "12345678");
@@ -21,7 +25,6 @@ final FirebaseDatabase _database=FirebaseDatabase.instance;
 showToDialog(BuildContext context,Workplace data) async{
 
   if(data!=null){
-    print("xasd");
     _key=data.key;
     txtWorkplaceName.text=data.name;
     selectType=data.type;
@@ -67,12 +70,12 @@ showToDialog(BuildContext context,Workplace data) async{
                   key: _formKey,
                   child:Column(
                     children: <Widget>[
-                      workplaceName(),
+                      workplaceName(txtWorkplaceName),
                       Type(),
-                      phone(),
-                      address(),
-                      authorizedPerson(),
-                      explanation(),
+                      phone(txtPhone),
+                      address(txtAddress),
+                      authorizedPerson(txtAuthorizedPerson),
+                      explanation(txtExplanation),
                     ],
                   ) ,
                 )
@@ -111,24 +114,7 @@ showToDialog(BuildContext context,Workplace data) async{
   );
 }
 
-Widget workplaceName(){
-  return TextFormField(
-    controller: txtWorkplaceName,
-    textCapitalization: TextCapitalization.words,
-    keyboardType: TextInputType.text,
-    decoration: InputDecoration(
-      labelText: "İşyerinin Adı",
-    ),
-    validator: (value){
-      if(value.isEmpty){
-        return "İş yeri adı boş bırakılmaz";
-      }
-      return null;
-    },
-    textInputAction: TextInputAction.next,
-  );
-}
-//Get all Type of Workplace
+
 class Type extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -155,6 +141,7 @@ class TypeState extends State<Type>{
       });
     });
 
+
   }
 
   Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
@@ -164,7 +151,7 @@ class TypeState extends State<Type>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
+   //print("Widget ");
     return FutureBuilder<String>(
         future: callAsyncFetch(),
         builder: (context, AsyncSnapshot<String> snapshot) {
@@ -190,81 +177,6 @@ class TypeState extends State<Type>{
 
 }
 
-Widget phone(){
-  return TextFormField(
-    controller:txtPhone ,
-    textCapitalization: TextCapitalization.words,
-    keyboardType: TextInputType.numberWithOptions(decimal: true),
-    inputFormatters: [
-      maskFormatter,
-    ],
-    decoration: InputDecoration(
-      hintText: "0 (999) 999 99 99",
-      hintStyle: TextStyle(fontSize:12),
-      labelText: "Telefon",
-    ),
-    validator: (value){
-      if(value.isEmpty){
-        return "Telefon boş bırakılmaz";
-      }
-      return null;
-    },
-    textInputAction: TextInputAction.next,
-  );
-}
-Widget address(){
-  return TextFormField(
-    controller:txtAddress,
-    textCapitalization: TextCapitalization.words,
-    keyboardType: TextInputType.text,
-    decoration: InputDecoration(
-      labelText: "Adresi",
-    ),
-    validator: (value){
-      if(value.isEmpty){
-        return "Adres boş bırakılmaz";
-      }
-      return null;
-    },
-    textInputAction: TextInputAction.next,
-  );
-}
-
-Widget authorizedPerson(){
-  return TextFormField(
-    controller:txtAuthorizedPerson ,
-    textCapitalization: TextCapitalization.words,
-    keyboardType: TextInputType.text,
-    decoration: InputDecoration(
-      labelText: "Yetkili Kişi",
-    ),
-    validator: (value){
-      if(value.isEmpty){
-        return "Yetkili Kişi alanı boş bırakılmaz";
-      }
-      return null;
-    },
-    textInputAction: TextInputAction.next,
-  );
-}
-
-Widget explanation(){
-  return TextFormField(
-    controller:txtExplanation ,
-    textCapitalization: TextCapitalization.words,
-    keyboardType: TextInputType.text,
-    decoration: InputDecoration(
-      labelText: "Açıklama",
-    ),
-    // validator: (value){
-    //   if(value.isEmpty){
-    //     return "Yetkili Kişi alanı boş bırakılmaz";
-    //   }
-    //   return null;
-    // },
-    textInputAction: TextInputAction.next,
-  );
-}
 
 addWorkplace(){
   print("add Workplace");
