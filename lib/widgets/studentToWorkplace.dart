@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:workplace_opinion_app/models/data.dart';
-import 'package:workplace_opinion_app/models/workplaceToForm.dart';
+import 'package:workplace_opinion_app/models/user.dart';
+import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
-import 'package:workplace_opinion_app/widgets/phone.dart';
-import 'package:workplace_opinion_app/widgets/workplaceName.dart';
 
 final _formKey = GlobalKey<FormState>();
 final FirebaseDatabase _database=FirebaseDatabase.instance;
@@ -19,6 +18,7 @@ TextEditingController txtExplanation=new TextEditingController();
 var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter: { "#": RegExp(r'[0-9]') });
 
 String selectWorkplace;
+String selectWorkplaceName;
 String selectTeacher;
 String selectBranch;
 String selectType;
@@ -96,7 +96,8 @@ class WorkplaceState extends State<Workplace>{
                   print(value);
                   workplace.forEach((f){
                     if(f.key==value){
-                      print(f.name);
+                      //print(f.name);
+                      selectWorkplaceName=f.name;
                     }
                   });
                 });
@@ -312,9 +313,10 @@ Widget saveButton(){
         style:new TextStyle(color: Colors.white)),
     onPressed: (){
       if(_formKey.currentState.validate()){
-          print("Kaydet");
+          _database.reference().child("user_workplace").push().set(UserWorkplace(selectWorkplace, selectWorkplaceName, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User("dasd",selectTeacher)).toJson());
         //addWorkplace();
         //Navigator.pop(context);
+        _formKey.currentState.reset();
       }
     },
   );
