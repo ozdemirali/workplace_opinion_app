@@ -22,25 +22,6 @@ String _key;
 final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 Widget showToForm(GlobalKey _formKey){
-  // if(data!=null){
-  //   print("xasd");
-  //   _key=data.key;
-  //   txtWorkplaceName.text=data.name;
-  //   selectType=data.type;
-  //   txtPhone.text=data.phone;
-  //   txtAddress.text=data.address;
-  //   txtAuthorizedPerson.text=data.authorizedPerson;
-  //   txtExplanation.text=data.explanation;
-  // }
-  // else{
-  //   txtWorkplaceName.text="";
-  //   selectType="Web";
-  //   txtPhone.text="";
-  //   txtAddress.text="";
-  //   txtAuthorizedPerson.text="";
-  //   txtExplanation.text="";
-  // }
-
   return Form(
     key:_formKey,
     child:Column(

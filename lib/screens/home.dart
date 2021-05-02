@@ -4,6 +4,7 @@ import 'package:workplace_opinion_app/screens/studentPlacement.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
+import 'package:workplace_opinion_app/widgets/workplaceAppointed.dart';
 import 'package:workplace_opinion_app/widgets/workplaceList.dart';
 
 class Home extends StatefulWidget{
@@ -60,7 +61,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: tabController,
         children: <Widget>[
-          Listeleme(),
+          WorkplaceAppointed(),
           StudentPlacement(),
           WorkplaceList(),
           Listeleme(),

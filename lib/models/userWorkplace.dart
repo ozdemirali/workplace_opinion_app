@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:workplace_opinion_app/models/user.dart';
 
@@ -21,7 +23,12 @@ class UserWorkplace{
         student=snapshot.value["student"],
         branch=snapshot.value["branch"],
         studentPhone=snapshot.value["studentPhone"],
-        user=snapshot.value["user"];
+        user= User(snapshot.value["user"]["uid"],snapshot.value["user"]["name"]);
+        //user= User(snapshot.value["user"]["uid"],snapshot.value["user"]["name"]);
+
+
+
+
 
 
 
