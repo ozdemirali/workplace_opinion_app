@@ -7,18 +7,20 @@ class UserWorkplace{
   String key;
   String workplace;
   String name;
+  String type;
   String year;
   String student;
   String branch;
   String studentPhone;
   User user;
 
-  UserWorkplace(this.workplace,this.name,this.year,this.student,this.branch,this.studentPhone,this.user);
+  UserWorkplace(this.workplace,this.name,this.type,this.year,this.student,this.branch,this.studentPhone,this.user);
 
   UserWorkplace.fromSnapshot(DataSnapshot snapshot) :
         key=snapshot.key,
         workplace=snapshot.value["workplace"],
         name=snapshot.value["name"],
+        type=snapshot.value["type"],
         year=snapshot.value["year"],
         student=snapshot.value["student"],
         branch=snapshot.value["branch"],
@@ -36,6 +38,7 @@ class UserWorkplace{
     return{
       "workplace":workplace,
       "name":name,
+      "type":type,
       "year":year,
       "student":student,
       "branch":branch,

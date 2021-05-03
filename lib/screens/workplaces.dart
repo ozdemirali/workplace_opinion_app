@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
 
-class WorkplaceList extends StatefulWidget{
+class Workplaces extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return WorkplaceListState();
+    return WorkplacesState();
   }
 }
 
-class WorkplaceListState extends State<WorkplaceList>{
+class WorkplacesState extends State<Workplaces>{
 
   List<Workplace> _workplaceList;
   Query _workplaceQuery;

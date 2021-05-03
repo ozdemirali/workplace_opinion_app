@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/screens/studentPlacement.dart';
+import 'package:workplace_opinion_app/screens/workplaceAppointed.dart';
+import 'package:workplace_opinion_app/screens/workplaces.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
 import 'package:workplace_opinion_app/widgets/showToDialog.dart';
-import 'package:workplace_opinion_app/widgets/workplaceAppointed.dart';
-import 'package:workplace_opinion_app/widgets/workplaceList.dart';
 
 class Home extends StatefulWidget{
   Home({this.auth,this.userId,this.logoutCallback});
@@ -63,15 +63,18 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         children: <Widget>[
           WorkplaceAppointed(),
           StudentPlacement(),
-          WorkplaceList(),
+          Workplaces(),
           Listeleme(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           //print("Ekle");
-          Workplace data;
-          showToDialog(context,data);
+         // Workplace data;
+         // print(tabController.index);
+          //showToDialog(context,data);
+          selectShowDialog(tabController.index);
+
         },
         tooltip: "Kayıt Ekle",
         child: Icon(Icons.add),
@@ -88,4 +91,29 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     }
   }
 
+  selectShowDialog(int index){
+    switch(index){
+      case 0:
+        print(index);
+        print("0");
+        break;
+      case 1:
+        print(index);
+        print("1");
+
+        break;
+      case 2:
+       Workplace data;
+       showToDialog(context,data);
+        break;
+      case 3:
+        print(index);
+        print("3");
+        break;
+
+      default:
+
+    }
+
+  }
 }

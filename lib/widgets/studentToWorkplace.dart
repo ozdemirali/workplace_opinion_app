@@ -19,6 +19,7 @@ var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter
 
 String selectWorkplace;
 String selectWorkplaceName;
+String selectWorkplaceType;
 String selectTeacher;
 String selectBranch;
 String selectType;
@@ -63,7 +64,7 @@ class WorkplaceState extends State<Workplace>{
          .then((DataSnapshot snapshot){
            Map<dynamic, dynamic> values=snapshot.value;
            values.forEach((k,v) {
-             workplace.add(Data(k,v["name"]));
+             workplace.add(Data(k,v["name"],v["type"]));
 
            });
      });
@@ -96,8 +97,11 @@ class WorkplaceState extends State<Workplace>{
                   print(value);
                   workplace.forEach((f){
                     if(f.key==value){
-                      //print(f.name);
+                       print(f.name);
+                       print(f.type);
                       selectWorkplaceName=f.name;
+                      selectWorkplaceType=f.type;
+
                     }
                   });
                 });
@@ -313,7 +317,7 @@ Widget saveButton(){
         style:new TextStyle(color: Colors.white)),
     onPressed: (){
       if(_formKey.currentState.validate()){
-          _database.reference().child("user_workplace").push().set(UserWorkplace(selectWorkplace, selectWorkplaceName, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User("dasd",selectTeacher)).toJson());
+          _database.reference().child("user_workplace").push().set(UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User("dasd",selectTeacher)).toJson());
         //addWorkplace();
         //Navigator.pop(context);
         _formKey.currentState.reset();
