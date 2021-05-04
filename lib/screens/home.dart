@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToStudentAssignment.dart';
 import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
+import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/screens/studentPlacement.dart';
 import 'package:workplace_opinion_app/screens/workplaceAppointed.dart';
@@ -100,11 +102,12 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       case 1:
         print(index);
         print("1");
-
+        UserWorkplace userWorkplace;
+        showToStudentAssignment(context, userWorkplace);
         break;
       case 2:
-       Workplace data;
-       showToWorkplace(context,data);
+       Workplace _workplace;
+       showToWorkplace(context,_workplace);
         break;
       case 3:
         print(index);

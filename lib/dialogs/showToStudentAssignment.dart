@@ -1,5 +1,5 @@
+
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:workplace_opinion_app/models/data.dart';
@@ -8,66 +8,147 @@ import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
 
-final _formKey = GlobalKey<FormState>();
-final FirebaseDatabase _database=FirebaseDatabase.instance;
+
 
 TextEditingController txtStudentName=new TextEditingController();
 TextEditingController txtStudentPhone=new TextEditingController();
-TextEditingController txtExplanation=new TextEditingController();
-
 var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter: { "#": RegExp(r'[0-9]') });
+
+final _formKey = GlobalKey<FormState>();
 
 String selectWorkplace;
 String selectWorkplaceName;
 String selectWorkplaceType;
-String selectTeacher;
+String selectTeacherName;
+String selectTeacherUid;
 String selectBranch;
 String selectType;
+String _key;
 
-Widget studentToWorkplace(){
-  return Form(
-    key:_formKey,
-    child:Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Workplace(),
-        Teacher(),
-        inputText(txtStudentName,"Öğrenin Adı"),
-        Branch(),
-        inputDigital(txtStudentPhone, "0 (999) 999 99 99", "Öğrencinin Telefonu", maskFormatter),
-        inputText(txtExplanation,"Açıklama"),
-        saveButton(),
-      ],
-    ) ,
+final FirebaseDatabase _database=FirebaseDatabase.instance;
+
+
+showToStudentAssignment(BuildContext context,UserWorkplace data) async{
+
+  if(data!=null){
+    _key=data.key;
+    selectWorkplace=data.workplace;
+    selectWorkplaceType=data.type;
+    selectTeacherUid=data.user.uid;
+    selectTeacherName=data.user.name;
+    txtStudentName.text=data.student;
+    txtStudentPhone.text=data.studentPhone;
+    selectBranch=data.branch;
+    selectType=data.type;
+  }
+  else{
+    //selectWorkplace=;
+    //selectWorkplaceType=data.type;
+    //selectTeacherUid=data.user.uid;
+    //selectTeacherName=data.user.name;
+    txtStudentName.text="";
+    txtStudentPhone.text="";
+    //selectBranch=data.branch;
+    //selectType=data.type;
+  }
+
+
+
+  await showDialog<String>(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          contentPadding: EdgeInsets.only(left: 5,right: 5),
+          title: Center(
+            child: Text("Stajer Atama"),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          ),
+          content: Container(
+            height: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //showToForm(_formKey),
+                  Form(
+                    key: _formKey,
+                    child:Column(
+                      children: <Widget>[
+                        WorkplaceList(),
+                        Teacher(),
+                        inputText(txtStudentName,"Öğrenin Adı"),
+                        Branch(),
+                        inputDigital(txtStudentPhone, "0 (999) 999 99 99", "Öğrencinin Telefonu", maskFormatter),
+                      ],
+                    ) ,
+                  )
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              alignment:Alignment.center,
+              child:  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  new FlatButton(
+                      child:const Text('İptal'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                  new FlatButton(
+                      child:const Text('Kayıt'),
+                      onPressed: () {
+                        if(_formKey.currentState.validate()){
+                          add();
+                          Navigator.pop(context);
+                        }
+
+                      }),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
   );
 }
 
-class Workplace extends StatefulWidget{
+class WorkplaceList extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return WorkplaceState();
+    return WorkplaceListState();
   }
 }
 
-class WorkplaceState extends State<Workplace>{
+class WorkplaceListState extends State<WorkplaceList>{
   List<Data> workplace=new List();
 
 
   @override
   void initState(){
     super.initState();
-     _database
+    _database
         .reference()
         .child("workplace")
         .once()
-         .then((DataSnapshot snapshot){
-           Map<dynamic, dynamic> values=snapshot.value;
-           values.forEach((k,v) {
-             workplace.add(Data(k,v["name"],v["type"]));
+        .then((DataSnapshot snapshot){
+      Map<dynamic, dynamic> values=snapshot.value;
+      values.forEach((k,v) {
+        workplace.add(Data(k,v["name"],v["type"]));
 
-           });
-     });
+      });
+    });
   }
 
   Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
@@ -97,79 +178,13 @@ class WorkplaceState extends State<Workplace>{
                   print(value);
                   workplace.forEach((f){
                     if(f.key==value){
-                       print(f.name);
-                       print(f.type);
+                      print(f.name);
+                      print(f.type);
                       selectWorkplaceName=f.name;
                       selectWorkplaceType=f.type;
 
                     }
                   });
-                });
-              },
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
-        });
-  }
-
-}
-
-
-class Type extends StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return TypeState();
-  }
-}
-
-class TypeState extends State<Type>{
-  List<String> type=new List();
-
-  @override
-  void initState(){
-    super.initState();
-    _database
-        .reference()
-        .child("type").orderByKey()
-        .once()
-        .then((DataSnapshot snapshot){
-          print(snapshot);
-      snapshot.value.forEach((value){
-
-        if(value!=null){
-          print(value);
-          type.add(value["name"].trim());
-        }
-      });
-    });
-
-
-  }
-
-  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
-      type.length.toString()
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    //print("Widget ");
-    return FutureBuilder<String>(
-        future: callAsyncFetch(),
-        builder: (context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.data!="0") {
-            return DropdownButtonFormField<String>(
-              value: selectType,
-              items: type
-                  .map((label) => DropdownMenuItem(
-                child: Text(label),
-                value: label,
-              )).toList(),
-              onChanged: (value){
-                setState(() {
-                  selectType=value;
                 });
               },
             );
@@ -189,7 +204,7 @@ class Teacher extends StatefulWidget{
 }
 
 class TeacherState extends State<Teacher>{
-  List<String> teacher=new List();
+  List<User> teacher=new List();
 
   @override
   void initState() {
@@ -204,7 +219,7 @@ class TeacherState extends State<Teacher>{
       snapshot.value.forEach((value){
         if(value!=null){
           //print(value["name"]);
-          teacher.add(value["name"].trim()+" "+value["surname"].trim());
+          teacher.add(User(value["uid"], value["name"].trim()+" "+value["surname"].trim()));
         }
       });
     });
@@ -224,16 +239,23 @@ class TeacherState extends State<Teacher>{
           //print(teacher);
           return DropdownButtonFormField<String>(
             hint: Text("Öğretmen Ata"),
-            value: selectTeacher,
+            value: selectTeacherUid,
             items: teacher
                 .map((label)=>DropdownMenuItem(
-              child: Text(label),
-              value: label,
+              child: Text(label.name),
+              value: label.uid,
             )).toList(),
             onChanged: (value){
               setState(() {
-                selectTeacher=value;
-                print (selectTeacher);
+                teacher.forEach((f){
+                  if(f.uid==value){
+                    selectTeacherUid=f.uid;
+                    selectTeacherName=f.name;
+                  }
+                  //print(selectTeacherUid);
+                  //print(selectTeacherName);
+
+                });
               });
             },
           );
@@ -310,19 +332,21 @@ class BranchState extends State<Branch>{
 }
 
 
-Widget saveButton(){
-  return FlatButton(
-    color: Colors.teal,
-    child: Text("Kaydet",
-        style:new TextStyle(color: Colors.white)),
-    onPressed: (){
-      if(_formKey.currentState.validate()){
-          _database.reference().child("user_workplace").push().set(UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User("dasd",selectTeacher)).toJson());
-        //addWorkplace();
-        //Navigator.pop(context);
-        _formKey.currentState.reset();
-      }
-    },
-  );
+
+
+add(){
+  print("add Workplace");
+  print("asd");
+  //_database.reference().child("user_workplace").push().set(UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User(selectTeacherUid,selectTeacherName)).toJson());
+  UserWorkplace userWorkplace=new UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User(selectTeacherUid,selectTeacherName));
+  //Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+  if(_key==null){
+    print("add new data");
+    _database.reference().child("user_workplace").push().set(userWorkplace.toJson());
+  }
+  else{
+    print("update data");
+    _database.reference().child("user_workplace").child(_key).set(userWorkplace.toJson());
+  }
 
 }

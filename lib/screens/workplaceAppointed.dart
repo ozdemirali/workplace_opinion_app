@@ -5,7 +5,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/user.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
-import 'package:workplace_opinion_app/widgets/showToAppointed.dart';
 
 class WorkplaceAppointed extends StatefulWidget{
   @override
@@ -87,9 +86,6 @@ class WorkplaceAppointedState extends State<WorkplaceAppointed> {
                     subtitle: Text(_appointedWorkplaceList[position].student+" ("+_appointedWorkplaceList[position].branch +") "+_appointedWorkplaceList[position].studentPhone),
                     onTap: (){
                       print("Seçildi");
-                      showToAppointed(context,_appointedWorkplaceList[position]);
-
-                      //print(_appointedWorkplaceList[position].toJson());
                     },
                   ),
                 );

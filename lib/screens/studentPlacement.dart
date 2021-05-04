@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToStudentAssignment.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
-import 'package:workplace_opinion_app/widgets/studentToWorkplace.dart';
 
 class StudentPlacement extends StatefulWidget{
   @override
@@ -116,9 +115,9 @@ class StudentPlacementState extends State<StudentPlacement> {
                     subtitle: Text(_userWorkplaceList[position].student +" - ("+_userWorkplaceList[position].branch+") "+_userWorkplaceList[position].studentPhone
                     ),
                     onTap: (){
-                      print("Seçildi");
-                      print(_userWorkplaceList[position]);
-                      //showToDialog(context, _userWorkplaceList[position]);
+                      //print("Seçildi");
+                      //print(_userWorkplaceList[position]);
+                       //showToStudentAssignment(context, _userWorkplaceList[position]);
                     },
                   ),
                 ),
