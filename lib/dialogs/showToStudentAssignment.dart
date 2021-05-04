@@ -2,7 +2,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:workplace_opinion_app/models/data.dart';
+import 'package:workplace_opinion_app/models/dataWorkplace.dart';
 import 'package:workplace_opinion_app/models/user.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
@@ -132,7 +132,7 @@ class WorkplaceList extends StatefulWidget{
 }
 
 class WorkplaceListState extends State<WorkplaceList>{
-  List<Data> workplace=new List();
+  List<DataWorkplace> workplace=new List();
 
 
   @override
@@ -145,7 +145,7 @@ class WorkplaceListState extends State<WorkplaceList>{
         .then((DataSnapshot snapshot){
       Map<dynamic, dynamic> values=snapshot.value;
       values.forEach((k,v) {
-        workplace.add(Data(k,v["name"],v["type"]));
+        workplace.add(DataWorkplace(k,v["name"],v["type"]));
 
       });
     });
