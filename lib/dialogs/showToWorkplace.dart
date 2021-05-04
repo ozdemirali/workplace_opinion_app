@@ -33,6 +33,7 @@ showToWorkplace(BuildContext context,Workplace data) async{
     txtExplanation.text=data.explanation;
   }
   else{
+    _key=null;
     txtWorkplaceName.text="";
     selectType="Web";
     txtPhone.text="";
@@ -179,8 +180,10 @@ class TypeState extends State<Type>{
 
 addWorkplace(){
   print("add Workplace");
-  print("asd");
+  //print("asd");
   Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+  print(workplace.toJson());
+  print(_key);
   if(_key==null){
     print("add new data");
     _database.reference().child("workplace").push().set(workplace.toJson());
@@ -188,6 +191,13 @@ addWorkplace(){
   else{
     print("update data");
     _database.reference().child("workplace").child(_key).set(workplace.toJson());
+
+    // FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    // DatabaseReference mDbRef = mDatabase.getReference("Donor/Name");
+    // mDbRef.setValue("Parinitha Krishna");
+    print(txtWorkplaceName.text);
+     //_database.reference().child("user_workplace").child(_key).set({'name': txtWorkplaceName.text});
+
   }
 
 }

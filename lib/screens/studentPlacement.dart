@@ -111,13 +111,13 @@ class StudentPlacementState extends State<StudentPlacement> {
                       backgroundColor: _userWorkplaceList[position].type=="Alan Dışı"?Colors.red:Colors.blue,
                       child: Text(""),
                     ),
-                    title: Text(_userWorkplaceList[position].name+" - "+_userWorkplaceList[position].user.name),
-                    subtitle: Text(_userWorkplaceList[position].student +" - ("+_userWorkplaceList[position].branch+") "+_userWorkplaceList[position].studentPhone
+                    title: Text(_userWorkplaceList[position].name +" - "+ _userWorkplaceList[position].user.name),
+                    subtitle: Text(_userWorkplaceList[position].student +"  ("+ _userWorkplaceList[position].branch+") "+ _userWorkplaceList[position].studentPhone
                     ),
                     onTap: (){
                       //print("Seçildi");
                       //print(_userWorkplaceList[position]);
-                       //showToStudentAssignment(context, _userWorkplaceList[position]);
+                       showToStudentAssignment(context, _userWorkplaceList[position]);
                     },
                   ),
                 ),

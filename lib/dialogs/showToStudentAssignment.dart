@@ -29,10 +29,10 @@ final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 
 showToStudentAssignment(BuildContext context,UserWorkplace data) async{
-
+ print(data);
   if(data!=null){
     _key=data.key;
-    selectWorkplace=data.workplace;
+    selectWorkplaceName=data.name;
     selectWorkplaceType=data.type;
     selectTeacherUid=data.user.uid;
     selectTeacherName=data.user.name;
@@ -42,7 +42,8 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
     selectType=data.type;
   }
   else{
-    //selectWorkplace=;
+    _key=null;
+    //selectWorkplace="";
     //selectWorkplaceType=data.type;
     //selectTeacherUid=data.user.uid;
     //selectTeacherName=data.user.name;
@@ -335,13 +336,17 @@ class BranchState extends State<Branch>{
 
 
 add(){
-  print("add Workplace");
-  print("asd");
+  print("add UserWorkplace");
+
   //_database.reference().child("user_workplace").push().set(UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User(selectTeacherUid,selectTeacherName)).toJson());
   UserWorkplace userWorkplace=new UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User(selectTeacherUid,selectTeacherName));
   //Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+  print(userWorkplace.toJson());
+  print(_key);
   if(_key==null){
+    //print(userWorkplace.key);
     print("add new data");
+
     _database.reference().child("user_workplace").push().set(userWorkplace.toJson());
   }
   else{

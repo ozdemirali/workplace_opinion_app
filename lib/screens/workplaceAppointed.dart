@@ -49,6 +49,7 @@ class WorkplaceAppointedState extends State<WorkplaceAppointed> {
   onEntryAdded(Event event){
     setState(() {
       _appointedWorkplaceList.add(UserWorkplace.fromSnapshot(event.snapshot));
+      //print(_appointedWorkplaceList[0].toJson());
     });
   }
 
@@ -83,7 +84,7 @@ class WorkplaceAppointedState extends State<WorkplaceAppointed> {
                       child: Text(""),
                     ),
                     title: Text(_appointedWorkplaceList[position].name),
-                    subtitle: Text(_appointedWorkplaceList[position].student+" ("+_appointedWorkplaceList[position].branch +") "+_appointedWorkplaceList[position].studentPhone),
+                    subtitle: Text(_appointedWorkplaceList[position].student +" ("+_appointedWorkplaceList[position].branch +") "+_appointedWorkplaceList[position].studentPhone),
                     onTap: (){
                       print("Seçildi");
                     },
