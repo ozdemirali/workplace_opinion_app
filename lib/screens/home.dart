@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/screens/studentPlacement.dart';
 import 'package:workplace_opinion_app/screens/workplaceAppointed.dart';
 import 'package:workplace_opinion_app/screens/workplaces.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
 import 'package:workplace_opinion_app/widgets/list.dart';
-import 'package:workplace_opinion_app/widgets/showToDialog.dart';
 
 class Home extends StatefulWidget{
   Home({this.auth,this.userId,this.logoutCallback});
@@ -104,7 +104,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         break;
       case 2:
        Workplace data;
-       showToDialog(context,data);
+       showToWorkplace(context,data);
         break;
       case 3:
         print(index);

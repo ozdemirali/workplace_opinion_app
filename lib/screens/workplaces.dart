@@ -3,8 +3,8 @@ import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
-import 'package:workplace_opinion_app/widgets/showToDialog.dart';
 
 class Workplaces extends StatefulWidget{
   @override
@@ -120,7 +120,7 @@ class WorkplacesState extends State<Workplaces>{
                     onTap: (){
                       print("Seçildi");
                       print(_workplaceList[position]);
-                      showToDialog(context, _workplaceList[position]);
+                      showToWorkplace(context, _workplaceList[position]);
                     },
                   ),
                 ),

@@ -1,18 +1,17 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
-import 'package:workplace_opinion_app/widgets/address.dart';
-import 'package:workplace_opinion_app/widgets/authorizerPerson.dart';
-import 'package:workplace_opinion_app/widgets/explanation.dart';
-import 'package:workplace_opinion_app/widgets/phone.dart';
-import 'package:workplace_opinion_app/widgets/workplaceName.dart';
+import 'package:workplace_opinion_app/widgets/inputDigital.dart';
+import 'package:workplace_opinion_app/widgets/inputText.dart';
 
 TextEditingController txtWorkplaceName=new TextEditingController();
 TextEditingController txtPhone=new TextEditingController(text: "12345678");
 TextEditingController txtAddress=new TextEditingController();
 TextEditingController txtAuthorizedPerson=new TextEditingController();
 TextEditingController txtExplanation=new TextEditingController();
+var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter: { "#": RegExp(r'[0-9]') });
 
 
 final _formKey = GlobalKey<FormState>();
@@ -22,7 +21,7 @@ String _key;
 final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 
-showToDialog(BuildContext context,Workplace data) async{
+showToWorkplace(BuildContext context,Workplace data) async{
 
   if(data!=null){
     _key=data.key;
@@ -45,72 +44,72 @@ showToDialog(BuildContext context,Workplace data) async{
 
 
   await showDialog<String>(
-    context: context,
-    builder: (BuildContext context){
-      return AlertDialog(
-        contentPadding: EdgeInsets.only(left: 5,right: 5),
-        title: Center(
-          child: Text("Yeni işyeri Ekle"),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-        ),
-        content: Container(
-          height: MediaQuery.of(context).size.width,
-          width: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                //showToForm(_formKey),
-                Form(
-                  key: _formKey,
-                  child:Column(
-                    children: <Widget>[
-                      workplaceName(txtWorkplaceName),
-                      Type(),
-                      phone(txtPhone),
-                      address(txtAddress),
-                      authorizedPerson(txtAuthorizedPerson),
-                      explanation(txtExplanation),
-                    ],
-                  ) ,
-                )
-              ],
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          contentPadding: EdgeInsets.only(left: 5,right: 5),
+          title: Center(
+            child: Text("Yeni işyeri Ekle"),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          ),
+          content: Container(
+            height: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //showToForm(_formKey),
+                  Form(
+                    key: _formKey,
+                    child:Column(
+                      children: <Widget>[
+                        inputText(txtWorkplaceName, "İşyerinin Adı"),
+                        Type(),
+                        inputDigital(txtPhone, "0 (999) 999 99 99", "Telefonu", maskFormatter),
+                        inputText(txtAddress, "Adresi"),
+                        inputText(txtAuthorizedPerson, "Yetkili Kişi"),
+                        inputText(txtExplanation, "Açıklama"),
+                      ],
+                    ) ,
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        actions: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            alignment:Alignment.center,
-            child:  Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                new FlatButton(
-                    child:const Text('İptal'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-                new FlatButton(
-                    child:const Text('Kayıt'),
-                    onPressed: () {
-                      if(_formKey.currentState.validate()){
+          actions: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              alignment:Alignment.center,
+              child:  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  new FlatButton(
+                      child:const Text('İptal'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                  new FlatButton(
+                      child:const Text('Kayıt'),
+                      onPressed: () {
+                        if(_formKey.currentState.validate()){
                           addWorkplace();
                           Navigator.pop(context);
-                      }
+                        }
 
-                    }),
-              ],
+                      }),
+                ],
+              ),
             ),
-          ),
-        ],
-      );
-    }
+          ],
+        );
+      }
   );
 }
 
@@ -151,7 +150,7 @@ class TypeState extends State<Type>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-   //print("Widget ");
+    //print("Widget ");
     return FutureBuilder<String>(
         future: callAsyncFetch(),
         builder: (context, AsyncSnapshot<String> snapshot) {
