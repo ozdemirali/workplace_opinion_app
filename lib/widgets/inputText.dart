@@ -11,7 +11,7 @@ Widget inputText(TextEditingController inputText,String label){
     ),
     validator: (value){
       if(value.isEmpty){
-        return "İş yeri adı boş bırakılmaz";
+        return "Bu alan boş bırakılmaz";
       }
       return null;
     },

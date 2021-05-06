@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToNotification.dart';
 import 'package:workplace_opinion_app/models/user.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 
@@ -87,6 +88,7 @@ class WorkplaceAppointedState extends State<WorkplaceAppointed> {
                     subtitle: Text(_appointedWorkplaceList[position].student +" ("+_appointedWorkplaceList[position].branch +") "+_appointedWorkplaceList[position].studentPhone),
                     onTap: (){
                       print("Seçildi");
+                      showToNotification(context,_appointedWorkplaceList[position].key);
                     },
                   ),
                 );

@@ -5,17 +5,17 @@ class Thought{
   String time;
   String notification;
 
-  Thought(this.time,this.notification);
+  Thought(this.notification,this.time);
 
   Thought.fromSnapshot(DataSnapshot snapshot):
         key=snapshot.key,
-        time=snapshot.value["time"],
-        notification=snapshot.value["notification"];
+        notification=snapshot.value["notification"],
+        time=snapshot.value["time"];
 
   toJson(){
     return{
-      "time":time,
       "notification":notification,
+      "time":time,
     };
   }
 }

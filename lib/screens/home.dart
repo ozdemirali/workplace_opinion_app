@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToNotification.dart';
 import 'package:workplace_opinion_app/dialogs/showToStudentAssignment.dart';
 import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
@@ -27,14 +28,16 @@ class Home extends StatefulWidget{
 class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   TabController tabController;
 
+
   @override
   void initState() {
-   tabController=new TabController(length: 4,initialIndex: 0, vsync: this);
     super.initState();
+    tabController=new TabController(length: 4,initialIndex: 0, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
+
     // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -69,20 +72,26 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
           Listeleme(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          //print("Ekle");
-         // Workplace data;
-         // print(tabController.index);
-          //showToDialog(context,data);
-          selectShowDialog(tabController.index);
-
-        },
-        tooltip: "Kayıt Ekle",
-        child: Icon(Icons.add),
+      floatingActionButton: new Visibility(
+        visible:true,
+        child: new FloatingActionButton(
+          onPressed: (){
+            selectShowDialog(tabController.index);
+          },
+          tooltip: 'Kayıt Ekle',
+          child: new Icon(Icons.add),
+        ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //     selectShowDialog(tabController.index);
+      //   },
+      //   tooltip: "Kayıt Ekle",
+      //   child:Icon(Icons.add),
+      // ),
     );
   }
+
 
   signOut() async {
     try {
@@ -96,12 +105,9 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   selectShowDialog(int index){
     switch(index){
       case 0:
-        print(index);
-        print("0");
+        //showToNotification(context);
         break;
       case 1:
-        print(index);
-        print("1");
         UserWorkplace userWorkplace;
         showToStudentAssignment(context, userWorkplace);
         break;
