@@ -2,6 +2,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
@@ -17,6 +18,7 @@ var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter
 final _formKey = GlobalKey<FormState>();
 String selectType;
 String _key;
+String controlTxtWorkplaceName;
 
 final FirebaseDatabase _database=FirebaseDatabase.instance;
 
@@ -26,6 +28,7 @@ showToWorkplace(BuildContext context,Workplace data) async{
   if(data!=null){
     _key=data.key;
     txtWorkplaceName.text=data.name;
+    controlTxtWorkplaceName=data.name;
     selectType=data.type;
     txtPhone.text=data.phone;
     txtAddress.text=data.address;
@@ -100,7 +103,7 @@ showToWorkplace(BuildContext context,Workplace data) async{
                       child:const Text('Kayıt'),
                       onPressed: () {
                         if(_formKey.currentState.validate()){
-                          addWorkplace();
+                          add();
                           Navigator.pop(context);
                         }
 
@@ -178,26 +181,23 @@ class TypeState extends State<Type>{
 }
 
 
-addWorkplace(){
-  print("add Workplace");
-  //print("asd");
+add(){
   Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
-  print(workplace.toJson());
-  print(_key);
   if(_key==null){
-    print("add new data");
     _database.reference().child("workplace").push().set(workplace.toJson());
   }
   else{
-    print("update data");
-    _database.reference().child("workplace").child(_key).set(workplace.toJson());
+   _database.reference().child("workplace").child(_key).set(workplace.toJson());
 
-    // FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    // DatabaseReference mDbRef = mDatabase.getReference("Donor/Name");
-    // mDbRef.setValue("Parinitha Krishna");
-    print(txtWorkplaceName.text);
-     //_database.reference().child("user_workplace").child(_key).set({'name': txtWorkplaceName.text});
-
+       if(_key!=null && txtWorkplaceName.text!=controlTxtWorkplaceName )
+       _database.reference().child("user_workplace").orderByChild("workplace").equalTo(_key)
+           .once()
+           .then((DataSnapshot snapshot){
+             snapshot.value.forEach((k,v){
+               if(k!=null)
+               _database.reference().child("user_workplace").child(k).child("name").set(txtWorkplaceName.text);
+             });
+       });
   }
 
 }
