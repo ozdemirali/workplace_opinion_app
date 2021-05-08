@@ -1,5 +1,6 @@
 
 
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/notice.dart';
@@ -25,7 +26,14 @@ showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
         return AlertDialog(
           contentPadding: EdgeInsets.only(left: 5,right: 5),
           title: Center(
-            child: Text("Bildirim"),
+            child:  Form(
+              key: _formKey,
+              child:Column(
+                children: <Widget>[
+                  inputText(txtNotification, "Bildiriminiz"),
+                ],
+              ) ,
+            ),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -34,21 +42,22 @@ showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
             height: MediaQuery.of(context).size.width,
             width: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   SizedBox(
                     height: 10,
                   ),
-                  //showToForm(_formKey),
-                  Form(
-                    key: _formKey,
-                    child:Column(
-                      children: <Widget>[
-                        inputText(txtNotification, "Bildiriminiz"),
-                      ],
-                    ) ,
-                  )
+                  // Form(
+                  //   key: _formKey,
+                  //   child:Column(
+                  //     children: <Widget>[
+                  //       inputText(txtNotification, "Bildiriminiz"),
+                  //     ],
+                  //   ) ,
+                  // ),
+                  listNotification(userWorkplace.key),
                 ],
               ),
             ),
@@ -70,7 +79,7 @@ showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
                       child:const Text('Kayıt'),
                       onPressed: () {
                         if(_formKey.currentState.validate()){
-                           add(userWorkplace.key,userWorkplace.user.name,txtNotification.text);
+                          add(userWorkplace.key,userWorkplace.user.name,txtNotification.text);
                           Navigator.pop(context);
                         }
 
@@ -84,7 +93,50 @@ showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
   );
 }
 
+Widget listNotification(String userWorkplaceKey){
+  List<Notice> notification=new List();
+  _database.reference().child("notification")
+      .orderByChild("userWorkplace")
+      .equalTo(userWorkplaceKey)
+      .once().then((DataSnapshot snapshot){
+    if(snapshot.value!=null){
+      Map<dynamic, dynamic> values=snapshot.value;
+      values.forEach((k,v) {
+        notification.add(Notice(v["userWorkplace"],v["userName"],v["notification"],v["time"]));
+      });
+    }
 
+  });
+
+  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
+      notification.length.toString()
+  );
+
+  return FutureBuilder<String>(
+      future: callAsyncFetch(),
+      builder: (context, AsyncSnapshot<String> snapshot) {
+        print(snapshot.data);
+        if (snapshot.data!="0") {
+          return ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: notification.length,
+              itemBuilder: (BuildContext context,int position){
+                return ListTile(
+                  title: Text(notification[position].notification),
+                  subtitle: Text(notification[position].userName + " - "+notification[position].time ,style: TextStyle(fontSize: 12),),
+                );
+
+              });
+        } else {
+          return ListTile(
+            subtitle: Text("Heni bildirim yapmadınız.",style:TextStyle(fontSize: 12) ,),
+          );
+        }
+      });
+
+
+}
 
 
 
