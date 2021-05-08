@@ -62,17 +62,11 @@ class StudentPlacementState extends State<StudentPlacement> {
   }
 
   onEntryRemoved(Event event){
-    //print("Silindi");
-    //print(event.snapshot.key);
-
     var oldEntry=_userWorkplaceList.singleWhere((entry){
       return entry.key==event.snapshot.key;
     });
-
     setState(() {
-      //print(_jobList.length);
       _userWorkplaceList.remove(oldEntry);
-      // print(_jobList.length);
     });
   }
 

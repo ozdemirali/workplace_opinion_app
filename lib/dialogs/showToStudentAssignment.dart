@@ -29,9 +29,10 @@ final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 
 showToStudentAssignment(BuildContext context,UserWorkplace data) async{
- print(data);
+ //print(data.toJson());
   if(data!=null){
     _key=data.key;
+    selectWorkplace=data.workplace;
     selectWorkplaceName=data.name;
     selectWorkplaceType=data.type;
     selectTeacherUid=data.user.uid;
@@ -176,11 +177,11 @@ class WorkplaceListState extends State<WorkplaceList>{
               onChanged: (value){
                 setState(() {
                   selectWorkplace=value;
-                  print(value);
+                  //print(value);
                   workplace.forEach((f){
                     if(f.key==value){
-                      print(f.name);
-                      print(f.type);
+                      //print(f.name);
+                      //print(f.type);
                       selectWorkplaceName=f.name;
                       selectWorkplaceType=f.type;
 

@@ -2,7 +2,8 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:workplace_opinion_app/models/thought.dart';
+import 'package:workplace_opinion_app/models/notice.dart';
+import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
 
 
@@ -11,38 +12,12 @@ TextEditingController txtNotification=new TextEditingController();
 
 final _formKey = GlobalKey<FormState>();
 
-String selectWorkplace;
-String selectWorkplaceName;
-String selectWorkplaceType;
-String selectTeacherName;
-String selectTeacherUid;
-String selectBranch;
-String selectType;
-String _key;
 
 final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 
-showToNotification(BuildContext context,String key) async{
-  print(key);
-  // if(data!=null){
-  //   _key=data.key;
-  //   selectWorkplaceName=data.name;
-  //   selectWorkplaceType=data.type;
-  //   selectTeacherUid=data.user.uid;
-  //   selectTeacherName=data.user.name;
-  //   txtStudentName.text=data.student;
-  //   txtStudentPhone.text=data.studentPhone;
-  //   selectBranch=data.branch;
-  //   selectType=data.type;
-  // }
-  // else{
-  //   _key=null;
-  //   txtStudentName.text="";
-  //   txtStudentPhone.text="";
-  // }
-  //
-
+showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
+  txtNotification.text="";
 
   await showDialog<String>(
       context: context,
@@ -95,7 +70,7 @@ showToNotification(BuildContext context,String key) async{
                       child:const Text('Kayıt'),
                       onPressed: () {
                         if(_formKey.currentState.validate()){
-                          add(key);
+                           add(userWorkplace.key,userWorkplace.user.name,txtNotification.text);
                           Navigator.pop(context);
                         }
 
@@ -116,12 +91,12 @@ showToNotification(BuildContext context,String key) async{
 
 
 
-add(String _key){
+add(String userWorkplaceKey,String userName,String not){
 
   String time=DateTime.now().day.toString() +"/"+DateTime.now().month.toString()+ "/"+ DateTime.now().year.toString();
-  Thought thought=new Thought(txtNotification.text, time);
+  Notice notification=new Notice(userWorkplaceKey, userName, not, time);
 
-  _database.reference().child("user_workplace").child(_key).child("tohougts").push().set(thought.toJson());
+  _database.reference().child("notification").push().set(notification.toJson());
 
 
 }
