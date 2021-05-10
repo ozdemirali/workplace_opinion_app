@@ -32,7 +32,7 @@ class WorkplaceAppointedState extends State<WorkplaceAppointed> {
     _appointedWorkplaceList=new List();
     _appointedQuery= _database.reference()
         .child("user_workplace")
-        .orderByChild("user/uid").equalTo("es1gh1m0SPZdi3bIXFPtDep30WF2");
+        .orderByChild("uid_year").equalTo("es1gh1m0SPZdi3bIXFPtDep30WF2_2020");
 
     _onAppointedListAddedSubscription=_appointedQuery.onChildAdded.listen(onEntryAdded);
     _onAppointedListChangedSubscription=_appointedQuery.onChildChanged.listen(onEntryChanged);

@@ -103,7 +103,7 @@ class StudentPlacementState extends State<StudentPlacement> {
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: _userWorkplaceList[position].type=="Alan Dışı"?Colors.red:Colors.blue,
-                      child: Text(""),
+                      child: Text(_userWorkplaceList[position].year,style: TextStyle(fontSize: 8,color: Colors.black,fontWeight: FontWeight.bold ),),
                     ),
                     title: Text(_userWorkplaceList[position].name +" - "+ _userWorkplaceList[position].user.name),
                     subtitle: Text(_userWorkplaceList[position].student +"  ("+ _userWorkplaceList[position].branch+") "+ _userWorkplaceList[position].studentPhone

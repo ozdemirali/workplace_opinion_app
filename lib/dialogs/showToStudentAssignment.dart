@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:workplace_opinion_app/models/dataWorkplace.dart';
+import 'package:workplace_opinion_app/models/period.dart';
 import 'package:workplace_opinion_app/models/user.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
@@ -23,6 +24,8 @@ String selectTeacherName;
 String selectTeacherUid;
 String selectBranch;
 String selectType;
+String selectPeriod;
+String selectYear;
 String _key;
 
 final FirebaseDatabase _database=FirebaseDatabase.instance;
@@ -41,17 +44,13 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
     txtStudentPhone.text=data.studentPhone;
     selectBranch=data.branch;
     selectType=data.type;
+    selectPeriod=data.year;
   }
   else{
     _key=null;
-    //selectWorkplace="";
-    //selectWorkplaceType=data.type;
-    //selectTeacherUid=data.user.uid;
-    //selectTeacherName=data.user.name;
     txtStudentName.text="";
     txtStudentPhone.text="";
-    //selectBranch=data.branch;
-    //selectType=data.type;
+
   }
 
 
@@ -85,6 +84,7 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
                         WorkplaceList(),
                         Teacher(),
                         inputText(txtStudentName,"Öğrenin Adı"),
+                        AcademicYear(),
                         Branch(),
                         inputDigital(txtStudentPhone, "0 (999) 999 99 99", "Öğrencinin Telefonu", maskFormatter),
                       ],
@@ -112,7 +112,7 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
                       onPressed: () {
                         if(_formKey.currentState.validate()){
                           add();
-                          Navigator.pop(context);
+                         // Navigator.pop(context);
                         }
 
                       }),
@@ -333,11 +333,89 @@ class BranchState extends State<Branch>{
 
 }
 
+class AcademicYear extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return AcademicYearState();
+  }
+}
+
+class AcademicYearState extends State<AcademicYear>{
+  List<Period> period=new List();
+
+  @override
+  void initState(){
+    super.initState();
+    _database
+        .reference()
+        .child("academic_year").orderByKey()
+        .once()
+        .then((DataSnapshot snapshot){
+          snapshot.value.forEach((v){
+            print(v);
+            if(v!=null) {
+              period.add(Period(v["period"], v["year"]));
+            }
+
+          });
+          //print(year.length);
+      // Map<dynamic, dynamic> values=snapshot.value;
+      // values.forEach((k,v) {
+      //   year.add(Period(v["period"],v["year"]));
+      //
+      // });
+
+    });
+
+  }
+
+  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
+      period.length.toString()
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+ List<String> test=["2020-2021","2021-2022"];
+
+    return FutureBuilder<String>(
+        future: callAsyncFetch(),
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.data!="0") {
+            return DropdownButtonFormField<String>(
+              hint: Text("Eğtim Öğretim Yılı"),
+              value: selectPeriod,
+              items: period
+                  .map((label) => DropdownMenuItem(
+                child: Text(label.period),
+                value: label.period,
+              )).toList(),
+              onChanged: (value){
+                setState(() {
+                  period.forEach((f){
+                    if(f.period==value){
+                      selectPeriod=f.period;
+                      selectYear=f.year;
+                    }
+                  });
+                });
+              },
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
+  }
+
+}
 
 
 
 add(){
-  UserWorkplace userWorkplace=new UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType, "year", txtStudentName.text, selectBranch, txtStudentPhone.text,User(selectTeacherUid,selectTeacherName));
+  String uidYear;
+  uidYear=selectTeacherUid+"_"+selectYear;
+  UserWorkplace userWorkplace=new UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType,uidYear, selectPeriod, txtStudentName.text, selectBranch, txtStudentPhone.text,User(selectTeacherUid,selectTeacherName));
   if(_key==null){
     _database.reference().child("user_workplace").push().set(userWorkplace.toJson());
   }

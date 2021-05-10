@@ -8,13 +8,14 @@ class UserWorkplace{
   String workplace;
   String name;
   String type;
+  String uidYear;
   String year;
   String student;
   String branch;
   String studentPhone;
   User user;
 
-  UserWorkplace(this.workplace,this.name,this.type,this.year,this.student,this.branch,this.studentPhone,this.user);
+  UserWorkplace(this.workplace,this.name,this.type,this.uidYear,this.year,this.student,this.branch,this.studentPhone,this.user);
 
   UserWorkplace.fromSnapshot(DataSnapshot snapshot) :
         key=snapshot.key,
@@ -39,6 +40,7 @@ class UserWorkplace{
       "workplace":workplace,
       "name":name,
       "type":type,
+      "uid_year":uidYear,
       "year":year,
       "student":student,
       "branch":branch,
