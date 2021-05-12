@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/dialogs/showToNotification.dart';
 import 'package:workplace_opinion_app/dialogs/showToStudentAssignment.dart';
@@ -8,14 +9,13 @@ import 'package:workplace_opinion_app/screens/studentPlacement.dart';
 import 'package:workplace_opinion_app/screens/workplaceAppointed.dart';
 import 'package:workplace_opinion_app/screens/workplaces.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
-import 'package:workplace_opinion_app/widgets/list.dart';
 
 class Home extends StatefulWidget{
-  Home({this.auth,this.userId,this.logoutCallback});
+  Home({this.auth,this.user,this.logoutCallback});
 
   final BaseAuth auth;
   final VoidCallback logoutCallback;
-  final String userId;
+  final FirebaseUser user;
 
   @override
   State<StatefulWidget> createState() {
@@ -37,12 +37,26 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    //Get current year
+    int month;
+    int year;
+    String uidYear;
+    String period;
+    month=DateTime.now().month;
+    year=DateTime.now().year;
+
+    if(month>=1 && month<=8){
+      year=year-1;
+    }
+    uidYear=widget.user.uid+"_"+year.toString();
+    period=year.toString()+"-"+(year+1).toString();
+    print(period);
 
     // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar:new AppBar(
-        title: Text("Ali ÖZDEMİR"),
+        title: Text(widget.user.displayName),
         bottom: TabBar(
           controller: tabController,
           indicatorColor: Colors.white,
@@ -66,10 +80,10 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: tabController,
         children: <Widget>[
-          WorkplaceAppointed(),
-          StudentPlacement(),
+          WorkplaceAppointed(uidYear: uidYear,),
+          StudentPlacement(year: period,),
           Workplaces(),
-          Listeleme(),
+          Text("Yapılacak")
         ],
       ),
       floatingActionButton: new Visibility(

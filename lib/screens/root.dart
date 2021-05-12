@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
 
@@ -14,6 +15,7 @@ class Root extends StatefulWidget{
   Root({this.auth});
   final BaseAuth auth;
 
+
   @override
   State<StatefulWidget> createState() {
     return RootState();
@@ -23,26 +25,27 @@ class Root extends StatefulWidget{
 
 class RootState extends State<Root>{
   AuthStatus authStatus=AuthStatus.Not_Logged_In;
-  String userId="";
+  //String userId="";
+  FirebaseUser user;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.auth.getCurrentUser().then((user){
+    widget.auth.getCurrentUser().then((_user){
       setState((){
        if(user!=null){
-         userId=user?.uid;
+         user=_user;
        }
-       authStatus=user?.uid==null?AuthStatus.Not_Logged_In:AuthStatus.Logged_In;
+       authStatus=user==null?AuthStatus.Not_Logged_In:AuthStatus.Logged_In;
       });
     });
   }
 
   void loginCallback(){
-    widget.auth.getCurrentUser().then((user){
+    widget.auth.getCurrentUser().then((_user){
       setState(() {
-        userId=user.uid.toString();
+        user=_user;
       });
     });
     setState(() {
@@ -53,7 +56,7 @@ class RootState extends State<Root>{
   void logoutCallBack(){
     setState(() {
       authStatus=AuthStatus.Not_Logged_In;
-      userId="";
+      user=null;
     });
   }
 
@@ -68,9 +71,9 @@ class RootState extends State<Root>{
         );
         break;
       case AuthStatus.Logged_In:
-        if(userId.length>0 && userId!=null){
+        if(user!=null){
           return Home(
-            userId: userId,
+            user: user,
             auth: widget.auth,
             logoutCallback: logoutCallBack,
           );
@@ -87,8 +90,6 @@ class RootState extends State<Root>{
           loginCallback: loginCallback,
         );
     }
-
-    return null;
   }
 
 }

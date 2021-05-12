@@ -5,6 +5,8 @@ import 'package:workplace_opinion_app/dialogs/showToStudentAssignment.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 
 class StudentPlacement extends StatefulWidget{
+  StudentPlacement({this.year});
+  final year;
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -30,7 +32,9 @@ class StudentPlacementState extends State<StudentPlacement> {
     // TODO: implement initState
     super.initState();
     _userWorkplaceList=new List();
-    _userWorkplaceQuery=_database.reference().child("user_workplace");
+    _userWorkplaceQuery=_database.reference()
+                                  .child("user_workplace")
+                                  .orderByChild("year").equalTo(widget.year);
 
     _onUserWorkplaceAddedSubscription=_userWorkplaceQuery.onChildAdded.listen(onEntryAdded);
     _onUserWorkplaceChangedSubscription=_userWorkplaceQuery.onChildChanged.listen(onEntryChanged);
@@ -103,7 +107,7 @@ class StudentPlacementState extends State<StudentPlacement> {
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: _userWorkplaceList[position].type=="Alan Dışı"?Colors.red:Colors.blue,
-                      child: Text(_userWorkplaceList[position].year,style: TextStyle(fontSize: 8,color: Colors.black,fontWeight: FontWeight.bold ),),
+                      child: Text("",),
                     ),
                     title: Text(_userWorkplaceList[position].name +" - "+ _userWorkplaceList[position].user.name),
                     subtitle: Text(_userWorkplaceList[position].student +"  ("+ _userWorkplaceList[position].branch+") "+ _userWorkplaceList[position].studentPhone

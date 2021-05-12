@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -8,11 +7,14 @@ import 'package:workplace_opinion_app/models/user.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
+import 'package:workplace_opinion_app/widgets/teacher.dart';
 
 
 
 TextEditingController txtStudentName=new TextEditingController();
 TextEditingController txtStudentPhone=new TextEditingController();
+TextEditingController txtTeacherName=new TextEditingController();
+TextEditingController txtTeacherUid=new TextEditingController();
 var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter: { "#": RegExp(r'[0-9]') });
 
 final _formKey = GlobalKey<FormState>();
@@ -38,8 +40,8 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
     selectWorkplace=data.workplace;
     selectWorkplaceName=data.name;
     selectWorkplaceType=data.type;
-    selectTeacherUid=data.user.uid;
-    selectTeacherName=data.user.name;
+    txtTeacherUid.text=data.user.uid;
+    txtTeacherName.text=data.user.name;
     txtStudentName.text=data.student;
     txtStudentPhone.text=data.studentPhone;
     selectBranch=data.branch;
@@ -82,7 +84,7 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
                     child:Column(
                       children: <Widget>[
                         WorkplaceList(),
-                        Teacher(),
+                        Teacher(database: _database,teacherUid: txtTeacherUid, teacherName: txtTeacherName,),
                         inputText(txtStudentName,"Öğrenin Adı"),
                         AcademicYear(),
                         Branch(),
@@ -112,7 +114,7 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
                       onPressed: () {
                         if(_formKey.currentState.validate()){
                           add();
-                         // Navigator.pop(context);
+                          Navigator.pop(context);
                         }
 
                       }),
@@ -180,11 +182,8 @@ class WorkplaceListState extends State<WorkplaceList>{
                   //print(value);
                   workplace.forEach((f){
                     if(f.key==value){
-                      //print(f.name);
-                      //print(f.type);
                       selectWorkplaceName=f.name;
                       selectWorkplaceType=f.type;
-
                     }
                   });
                 });
@@ -198,78 +197,78 @@ class WorkplaceListState extends State<WorkplaceList>{
 
 }
 
-class Teacher extends StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-    return TeacherState();
-  }
-}
-
-class TeacherState extends State<Teacher>{
-  List<User> teacher=new List();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //print("---name");
-    _database
-        .reference()
-        .child("user").orderByKey()
-        .once()
-        .then((DataSnapshot snapshot){
-      snapshot.value.forEach((value){
-        if(value!=null){
-          //print(value["name"]);
-          teacher.add(User(value["uid"], value["name"].trim()+" "+value["surname"].trim()));
-        }
-      });
-    });
-  }
-  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds: 1),()=>
-      teacher.length.toString()
-  );
-
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return FutureBuilder<String>(
-      future: callAsyncFetch(),
-      builder: (context,AsyncSnapshot<String> snapshot){
-        if(snapshot.data!="0"){
-          //print(teacher);
-          return DropdownButtonFormField<String>(
-            hint: Text("Öğretmen Ata"),
-            value: selectTeacherUid,
-            items: teacher
-                .map((label)=>DropdownMenuItem(
-              child: Text(label.name),
-              value: label.uid,
-            )).toList(),
-            onChanged: (value){
-              setState(() {
-                teacher.forEach((f){
-                  if(f.uid==value){
-                    selectTeacherUid=f.uid;
-                    selectTeacherName=f.name;
-                  }
-                  //print(selectTeacherUid);
-                  //print(selectTeacherName);
-
-                });
-              });
-            },
-          );
-        }else
-        {
-          //print(teacher);
-          return CircularProgressIndicator();
-        }
-      },
-    );
-  }
-}
+// class Teacher extends StatefulWidget{
+//   @override
+//   State<StatefulWidget> createState() {
+//     return TeacherState();
+//   }
+// }
+//
+// class TeacherState extends State<Teacher>{
+//   List<User> teacher=new List();
+//
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     //print("---name");
+//     _database
+//         .reference()
+//         .child("user").orderByKey()
+//         .once()
+//         .then((DataSnapshot snapshot){
+//       snapshot.value.forEach((value){
+//         if(value!=null){
+//           //print(value["name"]);
+//           teacher.add(User(value["uid"], value["name"].trim()+" "+value["surname"].trim()));
+//         }
+//       });
+//     });
+//   }
+//   Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds: 1),()=>
+//       teacher.length.toString()
+//   );
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     return FutureBuilder<String>(
+//       future: callAsyncFetch(),
+//       builder: (context,AsyncSnapshot<String> snapshot){
+//         if(snapshot.data!="0"){
+//           //print(teacher);
+//           return DropdownButtonFormField<String>(
+//             hint: Text("Öğretmen Ata"),
+//             value: selectTeacherUid,
+//             items: teacher
+//                 .map((label)=>DropdownMenuItem(
+//               child: Text(label.name),
+//               value: label.uid,
+//             )).toList(),
+//             onChanged: (value){
+//               setState(() {
+//                 teacher.forEach((f){
+//                   if(f.uid==value){
+//                     selectTeacherUid=f.uid;
+//                     selectTeacherName=f.name;
+//                   }
+//                   //print(selectTeacherUid);
+//                   //print(selectTeacherName);
+//
+//                 });
+//               });
+//             },
+//           );
+//         }else
+//         {
+//           //print(teacher);
+//           return CircularProgressIndicator();
+//         }
+//       },
+//     );
+//   }
+// }
 
 class Branch extends StatefulWidget{
   @override
@@ -353,7 +352,7 @@ class AcademicYearState extends State<AcademicYear>{
         .once()
         .then((DataSnapshot snapshot){
           snapshot.value.forEach((v){
-            print(v);
+            //print(v);
             if(v!=null) {
               period.add(Period(v["period"], v["year"]));
             }
@@ -377,7 +376,6 @@ class AcademicYearState extends State<AcademicYear>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
- List<String> test=["2020-2021","2021-2022"];
 
     return FutureBuilder<String>(
         future: callAsyncFetch(),
@@ -415,7 +413,8 @@ class AcademicYearState extends State<AcademicYear>{
 add(){
   String uidYear;
   uidYear=selectTeacherUid+"_"+selectYear;
-  UserWorkplace userWorkplace=new UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType,uidYear, selectPeriod, txtStudentName.text, selectBranch, txtStudentPhone.text,User(selectTeacherUid,selectTeacherName));
+  UserWorkplace userWorkplace=new UserWorkplace(selectWorkplace, selectWorkplaceName,selectWorkplaceType,uidYear, selectPeriod, txtStudentName.text, selectBranch, txtStudentPhone.text,User(txtTeacherUid.text,txtTeacherName.text));
+
   if(_key==null){
     _database.reference().child("user_workplace").push().set(userWorkplace.toJson());
   }

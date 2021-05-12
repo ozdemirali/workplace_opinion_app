@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/dialogs/showToNotification.dart';
-import 'package:workplace_opinion_app/models/user.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 
 class WorkplaceAppointed extends StatefulWidget{
+  WorkplaceAppointed({this.uidYear});
+  final String uidYear;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -17,8 +19,7 @@ class WorkplaceAppointed extends StatefulWidget{
 class WorkplaceAppointedState extends State<WorkplaceAppointed> {
   List<UserWorkplace> _appointedWorkplaceList;
   Query _appointedQuery;
-  User data;
-  UserWorkplace test;
+
 
   final FirebaseDatabase _database=FirebaseDatabase.instance;
 
@@ -32,7 +33,7 @@ class WorkplaceAppointedState extends State<WorkplaceAppointed> {
     _appointedWorkplaceList=new List();
     _appointedQuery= _database.reference()
         .child("user_workplace")
-        .orderByChild("uid_year").equalTo("es1gh1m0SPZdi3bIXFPtDep30WF2_2020");
+        .orderByChild("uid_year").equalTo(widget.uidYear);
 
     _onAppointedListAddedSubscription=_appointedQuery.onChildAdded.listen(onEntryAdded);
     _onAppointedListChangedSubscription=_appointedQuery.onChildChanged.listen(onEntryChanged);
@@ -49,7 +50,6 @@ class WorkplaceAppointedState extends State<WorkplaceAppointed> {
   onEntryAdded(Event event){
     setState(() {
       _appointedWorkplaceList.add(UserWorkplace.fromSnapshot(event.snapshot));
-      //print(_appointedWorkplaceList[0].toJson());
     });
   }
 

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/mixin/validation_mixin.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
@@ -162,6 +163,7 @@ class LoginState extends State<Login> with ValidationMixin{
       ),
     );
   }
+
   Widget showLoginGoogleButton(){
     return new Padding(
       padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
@@ -221,15 +223,17 @@ class LoginState extends State<Login> with ValidationMixin{
     String userId="";
     //print("Email ..: $email");
     //print("Password : $password");
+    FirebaseUser user;
     try{
-      userId = await widget.auth.signIn(email, password);
+      user = await widget.auth.signIn(email, password);
       //print("Signed in: $userId");
+     // print(user);
 
       setState(() {
         isLoading = false;
       });
 
-      if (userId.length > 0 && userId != null) {
+      if (user != null) {
         widget.loginCallback();
       }
     }
@@ -248,18 +252,14 @@ class LoginState extends State<Login> with ValidationMixin{
       errorMessage = "";
       isLoading=true;
     });
-    String userId="";
-    //print("Email ..: $email");
-    //print("Password : $password");
+    FirebaseUser user;
     try{
-      userId = await widget.auth.signInGoogle();
-      //print("Signed in: $userId");
-
+      user=await widget.auth.signInGoogle();
       setState(() {
         isLoading = false;
       });
 
-      if (userId.length > 0 && userId != null) {
+      if (user != null) {
         widget.loginCallback();
       }
     }

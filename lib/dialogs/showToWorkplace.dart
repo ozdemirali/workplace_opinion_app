@@ -2,21 +2,21 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
+import 'package:workplace_opinion_app/widgets/type.dart';
 
 TextEditingController txtWorkplaceName=new TextEditingController();
 TextEditingController txtPhone=new TextEditingController(text: "12345678");
 TextEditingController txtAddress=new TextEditingController();
 TextEditingController txtAuthorizedPerson=new TextEditingController();
 TextEditingController txtExplanation=new TextEditingController();
+TextEditingController txtSelectType=new TextEditingController();
 var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter: { "#": RegExp(r'[0-9]') });
 
 
 final _formKey = GlobalKey<FormState>();
-String selectType;
 String _key;
 String controlTxtWorkplaceName;
 
@@ -29,7 +29,7 @@ showToWorkplace(BuildContext context,Workplace data) async{
     _key=data.key;
     txtWorkplaceName.text=data.name;
     controlTxtWorkplaceName=data.name;
-    selectType=data.type;
+    txtSelectType.text=data.type;
     txtPhone.text=data.phone;
     txtAddress.text=data.address;
     txtAuthorizedPerson.text=data.authorizedPerson;
@@ -38,7 +38,8 @@ showToWorkplace(BuildContext context,Workplace data) async{
   else{
     _key=null;
     txtWorkplaceName.text="";
-    selectType="Web";
+    //selectType="Web";
+    txtSelectType.text="Web";
     txtPhone.text="";
     txtAddress.text="";
     txtAuthorizedPerson.text="";
@@ -68,13 +69,14 @@ showToWorkplace(BuildContext context,Workplace data) async{
                   SizedBox(
                     height: 10,
                   ),
-                  //showToForm(_formKey),
                   Form(
                     key: _formKey,
                     child:Column(
                       children: <Widget>[
                         inputText(txtWorkplaceName, "İşyerinin Adı"),
-                        Type(),
+                        Type(
+                          selectValue: txtSelectType,
+                          database: _database,),
                         inputDigital(txtPhone, "0 (999) 999 99 99", "Telefonu", maskFormatter),
                         inputText(txtAddress, "Adresi"),
                         inputText(txtAuthorizedPerson, "Yetkili Kişi"),
@@ -102,10 +104,11 @@ showToWorkplace(BuildContext context,Workplace data) async{
                   new FlatButton(
                       child:const Text('Kayıt'),
                       onPressed: () {
-                        if(_formKey.currentState.validate()){
-                          add();
-                          Navigator.pop(context);
-                        }
+                        //print(txtSelectType.text);
+                       if(_formKey.currentState.validate()){
+                         add();
+                         Navigator.pop(context);
+                       }
 
                       }),
                 ],
@@ -117,72 +120,8 @@ showToWorkplace(BuildContext context,Workplace data) async{
   );
 }
 
-
-class Type extends StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return TypeState();
-  }
-}
-
-class TypeState extends State<Type>{
-  List<String> type=new List();
-
-  @override
-  void initState(){
-    super.initState();
-    _database
-        .reference()
-        .child("type").orderByKey()
-        .once()
-        .then((DataSnapshot snapshot){
-      snapshot.value.forEach((value){
-        if(value!=null){
-          type.add(value["name"].trim());
-        }
-      });
-    });
-
-
-  }
-
-  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
-      type.length.toString()
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    //print("Widget ");
-    return FutureBuilder<String>(
-        future: callAsyncFetch(),
-        builder: (context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.data!="0") {
-            return DropdownButtonFormField<String>(
-              value: selectType,
-              items: type
-                  .map((label) => DropdownMenuItem(
-                child: Text(label),
-                value: label,
-              )).toList(),
-              onChanged: (value){
-                setState(() {
-                  selectType=value;
-                });
-              },
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
-        });
-  }
-
-}
-
-
 add(){
-  Workplace workplace=new Workplace(txtWorkplaceName.text,selectType,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+  Workplace workplace=new Workplace(txtWorkplaceName.text,txtSelectType.text,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
   if(_key==null){
     _database.reference().child("workplace").push().set(workplace.toJson());
   }
@@ -202,7 +141,67 @@ add(){
 
 }
 
-
+// class Type extends StatefulWidget{
+//   @override
+//   State<StatefulWidget> createState() {
+//     // TODO: implement createState
+//     return TypeState();
+//   }
+// }
+//
+// class TypeState extends State<Type>{
+//   List<String> type=new List();
+//
+//   @override
+//   void initState(){
+//     super.initState();
+//     _database
+//         .reference()
+//         .child("type").orderByKey()
+//         .once()
+//         .then((DataSnapshot snapshot){
+//       snapshot.value.forEach((value){
+//         if(value!=null){
+//           type.add(value["name"].trim());
+//         }
+//       });
+//     });
+//
+//
+//   }
+//
+//   Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
+//       type.length.toString()
+//   );
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     //print("Widget ");
+//     return FutureBuilder<String>(
+//         future: callAsyncFetch(),
+//         builder: (context, AsyncSnapshot<String> snapshot) {
+//           if (snapshot.data!="0") {
+//             return DropdownButtonFormField<String>(
+//               value: selectType,
+//               items: type
+//                   .map((label) => DropdownMenuItem(
+//                 child: Text(label),
+//                 value: label,
+//               )).toList(),
+//               onChanged: (value){
+//                 setState(() {
+//                   selectType=value;
+//                 });
+//               },
+//             );
+//           } else {
+//             return CircularProgressIndicator();
+//           }
+//         });
+//   }
+//
+// }
 
 
 
