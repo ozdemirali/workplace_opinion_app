@@ -141,67 +141,6 @@ add(){
 
 }
 
-// class Type extends StatefulWidget{
-//   @override
-//   State<StatefulWidget> createState() {
-//     // TODO: implement createState
-//     return TypeState();
-//   }
-// }
-//
-// class TypeState extends State<Type>{
-//   List<String> type=new List();
-//
-//   @override
-//   void initState(){
-//     super.initState();
-//     _database
-//         .reference()
-//         .child("type").orderByKey()
-//         .once()
-//         .then((DataSnapshot snapshot){
-//       snapshot.value.forEach((value){
-//         if(value!=null){
-//           type.add(value["name"].trim());
-//         }
-//       });
-//     });
-//
-//
-//   }
-//
-//   Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
-//       type.length.toString()
-//   );
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // TODO: implement build
-//     //print("Widget ");
-//     return FutureBuilder<String>(
-//         future: callAsyncFetch(),
-//         builder: (context, AsyncSnapshot<String> snapshot) {
-//           if (snapshot.data!="0") {
-//             return DropdownButtonFormField<String>(
-//               value: selectType,
-//               items: type
-//                   .map((label) => DropdownMenuItem(
-//                 child: Text(label),
-//                 value: label,
-//               )).toList(),
-//               onChanged: (value){
-//                 setState(() {
-//                   selectType=value;
-//                 });
-//               },
-//             );
-//           } else {
-//             return CircularProgressIndicator();
-//           }
-//         });
-//   }
-//
-// }
 
 
 

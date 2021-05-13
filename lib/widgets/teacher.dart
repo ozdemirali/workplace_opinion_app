@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/models/user.dart';
 
+
 // ignore: must_be_immutable
 class Teacher extends StatefulWidget{
   Teacher({this.database,this.teacherUid,this.teacherName});
@@ -19,13 +20,17 @@ class Teacher extends StatefulWidget{
 
 class TeacherState extends State<Teacher>{
   List<User> teacher=new List();
-  //String selectTeacherUid;
+  String _selectValue;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //print("---name");
+        if(widget.teacherUid.text!=""){
+          //print("atandı");
+          _selectValue=widget.teacherUid.text;
+        }
+
     widget.database
           .reference()
           .child("user").orderByKey()
@@ -33,7 +38,6 @@ class TeacherState extends State<Teacher>{
           .then((DataSnapshot snapshot){
       snapshot.value.forEach((value){
         if(value!=null){
-          //print(value["name"]);
           teacher.add(User(value["uid"], value["name"].trim()+" "+value["surname"].trim()));
         }
       });
@@ -46,15 +50,15 @@ class TeacherState extends State<Teacher>{
 
   @override
   Widget build(BuildContext context) {
+
     // TODO: implement build
     return FutureBuilder<String>(
       future: callAsyncFetch(),
       builder: (context,AsyncSnapshot<String> snapshot){
         if(snapshot.data!="0"){
-          //print(teacher);
           return DropdownButtonFormField<String>(
             hint: Text("Öğretmen Ata"),
-            value: widget.teacherUid.text,
+            value: _selectValue,
             items: teacher
                 .map((label)=>DropdownMenuItem(
               child: Text(label.name),
@@ -62,15 +66,12 @@ class TeacherState extends State<Teacher>{
             )).toList(),
             onChanged: (value){
               setState(() {
+                _selectValue=value;
                 teacher.forEach((f){
                   if(f.uid==value){
                     widget.teacherUid.text=f.uid;
                     widget.teacherName.text=f.name;
-                    // selectTeacherUid=f.uid;
-                    // selectTeacherName=f.name;
                   }
-                  //print(selectTeacherUid);
-                  //print(selectTeacherName);
 
                 });
               });

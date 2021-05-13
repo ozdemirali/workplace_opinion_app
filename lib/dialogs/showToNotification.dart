@@ -115,7 +115,7 @@ Widget listNotification(String userWorkplaceKey){
   return FutureBuilder<String>(
       future: callAsyncFetch(),
       builder: (context, AsyncSnapshot<String> snapshot) {
-        print(snapshot.data);
+        //print(snapshot.data);
         if (snapshot.data!="0") {
           return ListView.builder(
               primary: false,
