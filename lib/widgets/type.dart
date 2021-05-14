@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class Type extends StatefulWidget{
-  Type({this.selectValue,this.database});
+  Type({this.database,this.selectValue,this.select});
+
   TextEditingController selectValue;
+  String select;
   FirebaseDatabase database;
+
 
   @override
   State<StatefulWidget> createState() {
@@ -24,19 +27,37 @@ class TypeState extends State<Type>{
   @override
   void initState(){
     super.initState();
-    _selectValue=widget.selectValue.text;
+    if(widget.selectValue.text!="")
+      _selectValue=widget.selectValue.text;
 
-    widget.database
-        .reference()
-        .child("type").orderByKey()
-        .once()
-        .then((DataSnapshot snapshot){
-      snapshot.value.forEach((value){
-        if(value!=null){
-          type.add(value["name"].trim());
-        }
+    if(widget.select.toLowerCase()=="type"){
+      widget.database
+          .reference()
+          .child("type").orderByKey()
+          .once()
+          .then((DataSnapshot snapshot){
+        snapshot.value.forEach((value){
+          if(value!=null){
+            type.add(value["name"].trim());
+          }
+        });
       });
-    });
+    }
+    else{
+      widget.database
+          .reference()
+          .child("type").orderByKey().limitToFirst(3)
+          .once()
+          .then((DataSnapshot snapshot){
+        snapshot.value.forEach((value){
+          if(value!=null){
+            type.add(value["name"].trim());
+          }
+        });
+      });
+    }
+
+
 
 
   }

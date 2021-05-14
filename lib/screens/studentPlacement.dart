@@ -34,7 +34,7 @@ class StudentPlacementState extends State<StudentPlacement> {
     _userWorkplaceList=new List();
     _userWorkplaceQuery=_database.reference()
                                   .child("user_workplace")
-                                  .orderByChild("year").equalTo(widget.year);
+                                  .orderByChild("period").equalTo(widget.year);
 
     _onUserWorkplaceAddedSubscription=_userWorkplaceQuery.onChildAdded.listen(onEntryAdded);
     _onUserWorkplaceChangedSubscription=_userWorkplaceQuery.onChildChanged.listen(onEntryChanged);

@@ -9,20 +9,20 @@ class UserWorkplace{
   String name;
   String type;
   String uidYear;
-  String year;
+  String period;
   String student;
   String branch;
   String studentPhone;
   User user;
 
-  UserWorkplace(this.workplace,this.name,this.type,this.uidYear,this.year,this.student,this.branch,this.studentPhone,this.user);
+  UserWorkplace(this.workplace,this.name,this.type,this.uidYear,this.period,this.student,this.branch,this.studentPhone,this.user);
 
   UserWorkplace.fromSnapshot(DataSnapshot snapshot) :
         key=snapshot.key,
         workplace=snapshot.value["workplace"],
         name=snapshot.value["name"],
         type=snapshot.value["type"],
-        year=snapshot.value["year"],
+        period=snapshot.value["period"],
         student=snapshot.value["student"],
         branch=snapshot.value["branch"],
         studentPhone=snapshot.value["studentPhone"],
@@ -41,7 +41,7 @@ class UserWorkplace{
       "name":name,
       "type":type,
       "uid_year":uidYear,
-      "year":year,
+      "period":period,
       "student":student,
       "branch":branch,
       "studentPhone":studentPhone,

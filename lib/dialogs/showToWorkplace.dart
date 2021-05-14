@@ -75,8 +75,9 @@ showToWorkplace(BuildContext context,Workplace data) async{
                       children: <Widget>[
                         inputText(txtWorkplaceName, "İşyerinin Adı"),
                         Type(
+                          database: _database,
                           selectValue: txtSelectType,
-                          database: _database,),
+                          select: "type",),
                         inputDigital(txtPhone, "0 (999) 999 99 99", "Telefonu", maskFormatter),
                         inputText(txtAddress, "Adresi"),
                         inputText(txtAuthorizedPerson, "Yetkili Kişi"),
