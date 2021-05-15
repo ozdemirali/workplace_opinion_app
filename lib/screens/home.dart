@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/dialogs/showToNotification.dart';
-import 'package:workplace_opinion_app/dialogs/showToStudentAssignment.dart';
+import 'package:workplace_opinion_app/dialogs/showToStudentPlacement.dart';
 import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
@@ -27,17 +27,42 @@ class Home extends StatefulWidget{
 
 class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   TabController tabController;
+  bool floatButton=false;
 
 
   @override
   void initState() {
     super.initState();
     tabController=new TabController(length: 4,initialIndex: 0, vsync: this);
+    tabController.addListener(_printLatestValue);
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the widget tree.
+    // This also removes the _printLatestValue listener.
+    tabController.dispose();
+    super.dispose();
+  }
+
+
+   _printLatestValue() {
+   // print(tabController.index);
+    setState(() {
+      if(tabController.index==0){
+        floatButton=false;
+      }
+      else{
+        floatButton= true;
+      }
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
     //Get current year
+    //print(tabController..index);
     int month;
     int year;
     String uidYear;
@@ -50,7 +75,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     }
     uidYear=widget.user.uid+"_"+year.toString();
     period=year.toString()+"-"+(year+1).toString();
-    print(period);
+    //print(period);
 
     // TODO: implement build
     return Scaffold(
@@ -71,7 +96,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
           new FlatButton(
               child:new Text("Çıkış", style: new TextStyle(fontSize: 17.0,color: Colors.white), ),
               onPressed: (){
-                print("Çıkış");
                 signOut();
               }
           )
@@ -87,7 +111,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         ],
       ),
       floatingActionButton: new Visibility(
-        visible:true,
+        visible:floatButton,
         child: new FloatingActionButton(
           onPressed: (){
             selectShowDialog(tabController.index);
@@ -96,13 +120,6 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
           child: new Icon(Icons.add),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     selectShowDialog(tabController.index);
-      //   },
-      //   tooltip: "Kayıt Ekle",
-      //   child:Icon(Icons.add),
-      // ),
     );
   }
 
@@ -123,7 +140,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         break;
       case 1:
         UserWorkplace userWorkplace;
-        showToStudentAssignment(context, userWorkplace);
+        showToStudentPlacement(context, userWorkplace);
         break;
       case 2:
        Workplace _workplace;
@@ -133,10 +150,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
         print(index);
         print("3");
         break;
-
       default:
-
     }
-
   }
 }

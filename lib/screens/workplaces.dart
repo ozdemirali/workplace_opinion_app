@@ -1,6 +1,4 @@
-
 import 'dart:async';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
@@ -65,17 +63,13 @@ class WorkplacesState extends State<Workplaces>{
   }
 
   onEntryRemoved(Event event){
-    //print("Silindi");
-    //print(event.snapshot.key);
 
     var oldEntry=_workplaceList.singleWhere((entry){
       return entry.key==event.snapshot.key;
     });
 
     setState(() {
-      //print(_jobList.length);
       _workplaceList.remove(oldEntry);
-      // print(_jobList.length);
     });
   }
 
@@ -83,7 +77,6 @@ class WorkplacesState extends State<Workplaces>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    //print(_workplaceList);
     return Stack(
       children: <Widget>[
         Container(

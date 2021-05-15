@@ -31,7 +31,7 @@ String _key;
 final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 
-showToStudentAssignment(BuildContext context,UserWorkplace data) async{
+showToStudentPlacement(BuildContext context,UserWorkplace data) async{
   if(data!=null){
     _key=data.key;
     txtWorkplace.text=data.workplace;
@@ -127,7 +127,7 @@ showToStudentAssignment(BuildContext context,UserWorkplace data) async{
                       onPressed: () {
                         if(_formKey.currentState.validate()){
                           add();
-                          //Navigator.pop(context);
+                          Navigator.pop(context);
                         }
 
                       }),
