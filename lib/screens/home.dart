@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workplace_opinion_app/dialogs/showToNotification.dart';
 import 'package:workplace_opinion_app/dialogs/showToStudentPlacement.dart';
 import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
@@ -27,13 +26,14 @@ class Home extends StatefulWidget{
 
 class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   TabController tabController;
-  bool floatButton=false;
+  bool floatButton;
 
 
   @override
   void initState() {
     super.initState();
     tabController=new TabController(length: 4,initialIndex: 0, vsync: this);
+    floatButton=false;
     tabController.addListener(_printLatestValue);
   }
 
@@ -81,7 +81,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar:new AppBar(
-        title: Text(widget.user.displayName),
+        title:widget.user.displayName!=null?Text(widget.user.displayName):Text(""),
         bottom: TabBar(
           controller: tabController,
           indicatorColor: Colors.white,

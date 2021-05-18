@@ -1,6 +1,8 @@
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:workplace_opinion_app/dialogs/showToAlert.dart';
 import 'package:workplace_opinion_app/models/user.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
@@ -55,6 +57,25 @@ showToStudentPlacement(BuildContext context,UserWorkplace data) async{
     txtPeriod.text="";
   }
 
+  add(){
+    String uidYear;
+    uidYear=txtTeacherUid.text+"_"+txtYear.text;
+    UserWorkplace userWorkplace=new UserWorkplace(txtWorkplace.text, txtWorkplaceName.text,txtWorkplaceType.text,uidYear, txtPeriod.text, txtStudentName.text, txtBranch.text, txtStudentPhone.text,User(txtTeacherUid.text,txtTeacherName.text));
+    // print(userWorkplace.toJson());
+    if(_key==null){
+      _database.reference().child("user_workplace").push().set(userWorkplace.toJson());
+    }
+    else{
+      _database.reference().child("user_workplace").child(_key).set(userWorkplace.toJson()).then((_){
+        //print("Başarılı");
+      }).catchError((error){
+        print(error.message);
+        showToAlert(context,error.message);
+
+      });
+    }
+
+  }
 
 
   await showDialog<String>(
@@ -127,6 +148,7 @@ showToStudentPlacement(BuildContext context,UserWorkplace data) async{
                       onPressed: () {
                         if(_formKey.currentState.validate()){
                           add();
+                          //showToAlert(context);
                           Navigator.pop(context);
                         }
 
@@ -140,16 +162,3 @@ showToStudentPlacement(BuildContext context,UserWorkplace data) async{
   );
 }
 
-add(){
-  String uidYear;
-  uidYear=txtTeacherUid.text+"_"+txtYear.text;
-  UserWorkplace userWorkplace=new UserWorkplace(txtWorkplace.text, txtWorkplaceName.text,txtWorkplaceType.text,uidYear, txtPeriod.text, txtStudentName.text, txtBranch.text, txtStudentPhone.text,User(txtTeacherUid.text,txtTeacherName.text));
-  print(userWorkplace.toJson());
-  if(_key==null){
-    _database.reference().child("user_workplace").push().set(userWorkplace.toJson());
-  }
-  else{
-    _database.reference().child("user_workplace").child(_key).set(userWorkplace.toJson());
-  }
-
-}

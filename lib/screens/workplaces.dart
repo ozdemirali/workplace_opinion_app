@@ -89,7 +89,6 @@ class WorkplacesState extends State<Workplaces>{
                 key: Key(_workplaceList[position].key),
                 //background: Container(color:Colors.red),
                 onDismissed: (direction) async{
-                  //print("Dismission work");
                   deleteWorkplace(_workplaceList[position].key);
                 },
                 secondaryBackground: Container(
@@ -125,10 +124,9 @@ class WorkplacesState extends State<Workplaces>{
     );
   }
 
+  /// Deletes the item of list  record at [key] from the Realtime Database.
   deleteWorkplace(String key) {
     _database.reference().child("workplace").child(key).remove().then((_){});
   }
-
-
 }
 

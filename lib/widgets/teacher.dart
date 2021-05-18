@@ -27,7 +27,6 @@ class TeacherState extends State<Teacher>{
     // TODO: implement initState
     super.initState();
         if(widget.teacherUid.text!=""){
-          //print("atandı");
           _selectValue=widget.teacherUid.text;
         }
 
@@ -36,11 +35,15 @@ class TeacherState extends State<Teacher>{
           .child("user").orderByKey()
           .once()
           .then((DataSnapshot snapshot){
-      snapshot.value.forEach((value){
-        if(value!=null){
-          teacher.add(User(value["uid"], value["name"].trim()+" "+value["surname"].trim()));
-        }
+      Map<dynamic, dynamic> values=snapshot.value;
+      values.forEach((k,v) {
+        teacher.add(User(k,v["name"].trim()+" "+v["surname"].trim()));
       });
+      // snapshot.value.forEach((value){
+      //   if(value!=null){
+      //     teacher.add(User(value["uid"], value["name"].trim()+" "+value["surname"].trim()));
+      //   }
+      // });
     });
   }
   Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds: 1),()=>

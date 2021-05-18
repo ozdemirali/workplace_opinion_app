@@ -35,6 +35,7 @@ class Auth implements BaseAuth{
       //print(res.user);
       return res.user;
 
+
     }catch(e){
       print("Error logging with google");
       return null;
