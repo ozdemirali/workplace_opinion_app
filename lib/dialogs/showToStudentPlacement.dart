@@ -26,11 +26,12 @@ TextEditingController txtBranch=new TextEditingController();
 var maskFormatter = new MaskTextInputFormatter(mask: '# (###) ### ## ##', filter: { "#": RegExp(r'[0-9]') });
 
 final _formKey = GlobalKey<FormState>();
+final FirebaseDatabase _database=FirebaseDatabase.instance;
 
 String selectType;
 String _key;
 
-final FirebaseDatabase _database=FirebaseDatabase.instance;
+
 
 
 showToStudentPlacement(BuildContext context,UserWorkplace data) async{
@@ -69,7 +70,7 @@ showToStudentPlacement(BuildContext context,UserWorkplace data) async{
       _database.reference().child("user_workplace").child(_key).set(userWorkplace.toJson()).then((_){
         //print("Başarılı");
       }).catchError((error){
-        print(error.message);
+        //print(error);
         showToAlert(context,error.message);
 
       });

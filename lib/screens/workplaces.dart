@@ -124,7 +124,8 @@ class WorkplacesState extends State<Workplaces>{
     );
   }
 
-  /// Deletes the item of list  record at [key] from the Realtime Database.
+  /// This function deletes the item of workplace list  from the Realtime Database.
+  /// deletes according to [key]
   deleteWorkplace(String key) {
     _database.reference().child("workplace").child(key).remove().then((_){});
   }

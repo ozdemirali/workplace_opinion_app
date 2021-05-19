@@ -25,7 +25,6 @@ class Root extends StatefulWidget{
 
 class RootState extends State<Root>{
   AuthStatus authStatus=AuthStatus.Not_Logged_In;
-  //String userId="";
   FirebaseUser user;
 
   @override

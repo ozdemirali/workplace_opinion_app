@@ -26,12 +26,9 @@ class WorkplaceListState extends State<WorkplaceList>{
   @override
   void initState(){
     super.initState();
-    //print(widget.workplace.text);
-
     if(widget.workplace.text!=""){
       _selectValue=widget.workplace.text;
     }
-
     widget.database
         .reference()
         .child("workplace")
@@ -50,8 +47,6 @@ class WorkplaceListState extends State<WorkplaceList>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    //print("Widget ");
     return FutureBuilder<String>(
         future: callAsyncFetch(),
         builder: (context, AsyncSnapshot<String> snapshot) {

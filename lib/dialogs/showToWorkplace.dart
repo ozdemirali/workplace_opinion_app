@@ -38,7 +38,6 @@ showToWorkplace(BuildContext context,Workplace data) async{
   else{
     _key=null;
     txtWorkplaceName.text="";
-    //selectType="Web";
     txtSelectType.text="Web";
     txtPhone.text="";
     txtAddress.text="";
@@ -121,6 +120,10 @@ showToWorkplace(BuildContext context,Workplace data) async{
   );
 }
 
+///This function add and update new workplace to Realtime Database
+/// This operation changed , according to key
+/// When data has a key, update operation works
+/// When data has not a key, record operation works
 add(){
   Workplace workplace=new Workplace(txtWorkplaceName.text,txtSelectType.text,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
   if(_key==null){
@@ -139,7 +142,6 @@ add(){
              });
        });
   }
-
 }
 
 

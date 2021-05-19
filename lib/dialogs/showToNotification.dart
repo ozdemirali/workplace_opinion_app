@@ -7,12 +7,8 @@ import 'package:workplace_opinion_app/widgets/inputText.dart';
 
 
 TextEditingController txtNotification=new TextEditingController();
-
 final _formKey = GlobalKey<FormState>();
-
-
 final FirebaseDatabase _database=FirebaseDatabase.instance;
-
 
 showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
   txtNotification.text="";
@@ -127,7 +123,7 @@ Widget listNotification(String userWorkplaceKey){
               });
         } else {
           return ListTile(
-            subtitle: Text("Heni bildirim yapmadınız.",style:TextStyle(fontSize: 12) ,),
+            subtitle: Text("Henüz bildirimde bulunmadınız.",style:TextStyle(fontSize: 12) ,),
           );
         }
       });

@@ -32,12 +32,9 @@ class Auth implements BaseAuth{
       if(res.user == null)
         return null;
 
-      //print(res.user);
       return res.user;
-
-
     }catch(e){
-      print("Error logging with google");
+      //print("Error logging with google");
       return null;
     }
   }

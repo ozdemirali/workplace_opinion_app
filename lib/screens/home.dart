@@ -34,6 +34,8 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     super.initState();
     tabController=new TabController(length: 4,initialIndex: 0, vsync: this);
     floatButton=false;
+
+    //this adds the listener
     tabController.addListener(_printLatestValue);
   }
 
@@ -45,9 +47,8 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     super.dispose();
   }
 
-
+   //This function set floatButton according to tabController.index
    _printLatestValue() {
-   // print(tabController.index);
     setState(() {
       if(tabController.index==0){
         floatButton=false;
@@ -70,12 +71,15 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     month=DateTime.now().month;
     year=DateTime.now().year;
 
+    //Here, for period is found  like year
     if(month>=1 && month<=8){
       year=year-1;
     }
-    uidYear=widget.user.uid+"_"+year.toString();
-    period=year.toString()+"-"+(year+1).toString();
-    //print(period);
+
+    //This uidYear variable is used, get data from Realtime Database as this period
+    //like cg6ht8k1KLMsü5xSXFPtTek30WF2_2020
+    uidYear=widget.user.uid+"_"+year.toString(); //2020
+    period=year.toString()+"-"+(year+1).toString();//2020-2021
 
     // TODO: implement build
     return Scaffold(
@@ -124,6 +128,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
   }
 
 
+  //This function is used when close the application
   signOut() async {
     try {
       await widget.auth.signOut();
@@ -133,11 +138,9 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     }
   }
 
+  //According to index of tabController, run dialog
   selectShowDialog(int index){
     switch(index){
-      case 0:
-        //showToNotification(context);
-        break;
       case 1:
         UserWorkplace userWorkplace;
         showToStudentPlacement(context, userWorkplace);

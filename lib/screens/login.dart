@@ -178,17 +178,7 @@ class LoginState extends State<Login> with ValidationMixin{
             child: new Text("Sign in whit Google",
                 style:new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: ()async{
-              if(true){
-                //formKey.currentState.save();
-                //signInWithGoogle(email,password);
-                submitGoogle();
-              }
-              else{
-                setState(() {
-                  errorMessage="";
-                });
-              }
-
+              submitGoogle();
             }),
       ),
     );
@@ -221,13 +211,9 @@ class LoginState extends State<Login> with ValidationMixin{
       isLoading=true;
     });
     String userId="";
-    //print("Email ..: $email");
-    //print("Password : $password");
     FirebaseUser user;
     try{
       user = await widget.auth.signIn(email, password);
-      //print("Signed in: $userId");
-     // print(user);
 
       setState(() {
         isLoading = false;
@@ -272,6 +258,4 @@ class LoginState extends State<Login> with ValidationMixin{
       });
     }
   }
-
-
 }

@@ -68,8 +68,6 @@ class TypeState extends State<Type>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    //print("Widget ");
     return FutureBuilder<String>(
         future: callAsyncFetch(),
         builder: (context, AsyncSnapshot<String> snapshot) {

@@ -1,5 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
 
+///This class is defined as model
+///This model uses when A notice will be added to Realtime Database
+///On Realtime Database, Every notice is added to Notification(like table) as Json
+
 class Notice{
   String key;
   String userWorkplace;
