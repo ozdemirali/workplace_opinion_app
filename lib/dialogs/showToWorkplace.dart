@@ -2,6 +2,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:workplace_opinion_app/dialogs/showToAlert.dart';
+import 'package:workplace_opinion_app/method/saveToLog.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/widgets/inputDigital.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
@@ -104,9 +106,8 @@ showToWorkplace(BuildContext context,Workplace data) async{
                   new FlatButton(
                       child:const Text('Kayıt'),
                       onPressed: () {
-                        //print(txtSelectType.text);
                        if(_formKey.currentState.validate()){
-                         add();
+                         add(context);
                          Navigator.pop(context);
                        }
 
@@ -124,24 +125,32 @@ showToWorkplace(BuildContext context,Workplace data) async{
 /// This operation changed , according to key
 /// When data has a key, update operation works
 /// When data has not a key, record operation works
-add(){
-  Workplace workplace=new Workplace(txtWorkplaceName.text,txtSelectType.text,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
-  if(_key==null){
-    _database.reference().child("workplace").push().set(workplace.toJson());
-  }
-  else{
-   _database.reference().child("workplace").child(_key).set(workplace.toJson());
+add(BuildContext context){
+  try{
+    Workplace workplace=new Workplace(txtWorkplaceName.text,txtSelectType.text,txtPhone.text, txtAddress.text, txtAuthorizedPerson.text, txtExplanation.text);
+    if(_key==null){
+      _database.reference().child("workplace").push().set(workplace.toJson());
+    }
+    else{
+      _database.reference().child("workplace").child(_key).set(workplace.toJson());
 
-       if(_key!=null && txtWorkplaceName.text!=controlTxtWorkplaceName )
-       _database.reference().child("user_workplace").orderByChild("workplace").equalTo(_key)
-           .once()
-           .then((DataSnapshot snapshot){
-             snapshot.value.forEach((k,v){
-               if(k!=null)
-               _database.reference().child("user_workplace").child(k).child("name").set(txtWorkplaceName.text);
-             });
-       });
+      //if name of workplace changes, set name as new name of workplace on userWorkplace from Realtime Database,
+      if(_key!=null && txtWorkplaceName.text!=controlTxtWorkplaceName )
+        _database.reference().child("user_workplace").orderByChild("workplace").equalTo(_key)
+            .once()
+            .then((DataSnapshot snapshot){
+          snapshot.value.forEach((k,v){
+            if(k!=null)
+              _database.reference().child("user_workplace").child(k).child("name").set(txtWorkplaceName.text);
+          });
+        }).catchError((error){
+          showToAlert(context, error);
+        });
+    }
+  }catch(error){
+    saveToLog(error.toString());
   }
+
 }
 
 

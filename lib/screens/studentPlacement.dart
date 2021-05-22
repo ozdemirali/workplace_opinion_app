@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToAlert.dart';
 import 'package:workplace_opinion_app/dialogs/showToStudentPlacement.dart';
+import 'package:workplace_opinion_app/method/saveToLog.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 
 class StudentPlacement extends StatefulWidget{
@@ -130,6 +132,14 @@ class StudentPlacementState extends State<StudentPlacement> {
   /// This function deletes the item of userWorkplace list  from the Realtime Database.
   /// deletes according to [key]
   deleteUserWorkplace(String key) {
-    _database.reference().child("user_workplace").child(key).remove().then((_){});
+    try{
+      _database.reference().child("user_workplace").child(key).remove().then((_){})
+          .catchError((error){
+        showToAlert(context, error.toString());
+      });
+    }catch(error){
+      saveToLog(error.toString());
+    }
+
   }
 }

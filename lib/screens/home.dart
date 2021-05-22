@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workplace_opinion_app/dialogs/showToStudentPlacement.dart';
 import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
+import 'package:workplace_opinion_app/method/saveToLog.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 import 'package:workplace_opinion_app/screens/studentPlacement.dart';
@@ -25,6 +26,7 @@ class Home extends StatefulWidget{
 }
 
 class HomeState extends State<Home> with SingleTickerProviderStateMixin{
+
   TabController tabController;
   bool floatButton;
 
@@ -133,27 +135,33 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
     try {
       await widget.auth.signOut();
       widget.logoutCallback();
-    } catch (e) {
+    } catch (error) {
       //print(e);
+      saveToLog(error.toString());
     }
   }
 
   //According to index of tabController, run dialog
   selectShowDialog(int index){
-    switch(index){
-      case 1:
-        UserWorkplace userWorkplace;
-        showToStudentPlacement(context, userWorkplace);
-        break;
-      case 2:
-       Workplace _workplace;
-       showToWorkplace(context,_workplace);
-        break;
-      case 3:
-        print(index);
-        print("3");
-        break;
-      default:
+    try{
+      switch(index){
+        case 1:
+          UserWorkplace userWorkplace;
+          showToStudentPlacement(context, userWorkplace);
+          break;
+        case 2:
+          Workplace _workplace;
+          showToWorkplace(context,_workplace);
+          break;
+        case 3:
+          print(index);
+          print("3");
+          break;
+        default:
+      }
+    }catch (error){
+      saveToLog(error.toString());
     }
+
   }
 }

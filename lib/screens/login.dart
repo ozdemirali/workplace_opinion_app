@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/method/saveToLog.dart';
 import 'package:workplace_opinion_app/mixin/validation_mixin.dart';
 import 'package:workplace_opinion_app/services/auth.dart';
 
@@ -223,13 +224,14 @@ class LoginState extends State<Login> with ValidationMixin{
         widget.loginCallback();
       }
     }
-    catch(e){
+    catch(error){
       //print("Error : $e");
       setState(() {
         isLoading = false;
-        errorMessage=e.message;
+        errorMessage=error.message;
         formKey.currentState.reset();
       });
+      saveToLog(error.toString());
     }
   }
 
@@ -249,13 +251,14 @@ class LoginState extends State<Login> with ValidationMixin{
         widget.loginCallback();
       }
     }
-    catch(e){
+    catch(error){
       //print("Error : $e");
       setState(() {
         isLoading = false;
-        errorMessage=e.message;
+        errorMessage=error.message;
         formKey.currentState.reset();
       });
+      saveToLog(error.toString());
     }
   }
 }

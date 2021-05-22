@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToAlert.dart';
 import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
+import 'package:workplace_opinion_app/method/saveToLog.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
 
 class Workplaces extends StatefulWidget{
@@ -127,7 +129,14 @@ class WorkplacesState extends State<Workplaces>{
   /// This function deletes the item of workplace list  from the Realtime Database.
   /// deletes according to [key]
   deleteWorkplace(String key) {
-    _database.reference().child("workplace").child(key).remove().then((_){});
+    try{
+      _database.reference().child("workplace").child(key).remove().then((_){})
+          .catchError((error){
+        showToAlert(context, error.toString());
+      });
+    }catch(error){
+      saveToLog(error.toString());
+    }
   }
 }
 

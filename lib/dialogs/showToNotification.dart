@@ -1,5 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToAlert.dart';
+import 'package:workplace_opinion_app/method/saveToLog.dart';
 import 'package:workplace_opinion_app/models/notice.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
@@ -72,7 +74,7 @@ showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
                       child:const Text('Kayıt'),
                       onPressed: () {
                         if(_formKey.currentState.validate()){
-                          add(userWorkplace.key,userWorkplace.user.name,txtNotification.text);
+                          add(context,userWorkplace.key,userWorkplace.user.name,txtNotification.text);
                           Navigator.pop(context);
                         }
 
@@ -105,6 +107,8 @@ Widget listNotification(String userWorkplaceKey){
       notification.length.toString()
   );
 
+
+
   return FutureBuilder<String>(
       future: callAsyncFetch(),
       builder: (context, AsyncSnapshot<String> snapshot) {
@@ -135,13 +139,18 @@ Widget listNotification(String userWorkplaceKey){
 
 
 
-
-add(String userWorkplaceKey,String userName,String not){
-
-  String time=DateTime.now().day.toString() +"/"+DateTime.now().month.toString()+ "/"+ DateTime.now().year.toString();
-  Notice notification=new Notice(userWorkplaceKey, userName, not, time);
-
-  _database.reference().child("notification").push().set(notification.toJson());
-
+///Save notification
+///userWorkPlace add to Notification as Key on Realtime Database
+add(BuildContext context,String userWorkplaceKey,String userName,String not){
+  try{
+    String time=DateTime.now().day.toString() +"/"+DateTime.now().month.toString()+ "/"+ DateTime.now().year.toString();
+    Notice notification=new Notice(userWorkplaceKey, userName, not, time);
+    _database.reference().child("notification").push().set(notification.toJson()).then((_){
+    }).catchError((error){
+      showToAlert(context, error.toString());
+    });
+  }catch(error){
+    saveToLog(error.toString());
+  }
 
 }

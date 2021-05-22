@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:workplace_opinion_app/method/saveToLog.dart';
 
 abstract class BaseAuth{
   Future<FirebaseUser> signIn(String email,String password);
@@ -10,7 +11,6 @@ abstract class BaseAuth{
 
 class Auth implements BaseAuth{
   final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
-
 
   Future<FirebaseUser> signIn(String email, String password) async {
     AuthResult result=await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
@@ -33,8 +33,9 @@ class Auth implements BaseAuth{
         return null;
 
       return res.user;
-    }catch(e){
+    }catch(error){
       //print("Error logging with google");
+      saveToLog(error.toString());
       return null;
     }
   }
