@@ -5,6 +5,7 @@ import 'package:workplace_opinion_app/dialogs/showToWorkplace.dart';
 import 'package:workplace_opinion_app/method/saveToLog.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/models/workplace.dart';
+import 'package:workplace_opinion_app/screens/allWorkplaceAppointed.dart';
 import 'package:workplace_opinion_app/screens/studentPlacement.dart';
 import 'package:workplace_opinion_app/screens/workplaceAppointed.dart';
 import 'package:workplace_opinion_app/screens/workplaces.dart';
@@ -113,7 +114,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
           WorkplaceAppointed(uidYear: uidYear,),
           StudentPlacement(year: period,),
           Workplaces(),
-          Text("Yapılacak")
+          AllWorkplaceAppointed(),
         ],
       ),
       floatingActionButton: new Visibility(
