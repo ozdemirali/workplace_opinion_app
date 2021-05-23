@@ -14,10 +14,9 @@ final FirebaseDatabase _database = FirebaseDatabase.instance;
 /// [context] is for Alert Dialog,
 /// [userWorkplace] is data, which comes workplaceAppointed and allWorkplaceAppointed
 /// chose is optional.
-///chose parameter comes only from allWorkplaceAppointed
+///chose parameter comes only from allWorkplaceAppointed. It can be any number
 showToNotification(BuildContext context, UserWorkplace userWorkplace,[int chose]) async {
   txtNotification.text = "";
-  print(chose);
 
   await showDialog<String>(
       context: context,

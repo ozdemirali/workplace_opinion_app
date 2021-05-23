@@ -115,7 +115,7 @@ class AllWorkplaceAppointedState extends State<AllWorkplaceAppointed> {
                                   ") " +
                                   _foundWorkplace[position].period),
                               onTap: () {
-                                //print("Seçildi");
+                                //chosen parameter can be any number.
                                 showToNotification(context,_appointedWorkplaceList[position],0);
                               },
                             ),
