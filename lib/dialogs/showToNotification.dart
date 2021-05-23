@@ -6,29 +6,35 @@ import 'package:workplace_opinion_app/models/notice.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 import 'package:workplace_opinion_app/widgets/inputText.dart';
 
-
-
-TextEditingController txtNotification=new TextEditingController();
+TextEditingController txtNotification = new TextEditingController();
 final _formKey = GlobalKey<FormState>();
-final FirebaseDatabase _database=FirebaseDatabase.instance;
+final FirebaseDatabase _database = FirebaseDatabase.instance;
 
-showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
-  txtNotification.text="";
+///This method is for sent notification.
+/// [context] is for Alert Dialog,
+/// [userWorkplace] is data, which comes workplaceAppointed and allWorkplaceAppointed
+/// chose is optional.
+showToNotification(BuildContext context, UserWorkplace userWorkplace,
+    [int chose]) async {
+  txtNotification.text = "";
+  print(chose);
 
   await showDialog<String>(
       context: context,
-      builder: (BuildContext context){
+      builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.only(left: 5,right: 5),
+          contentPadding: EdgeInsets.only(left: 5, right: 5),
           title: Center(
-            child:  Form(
-              key: _formKey,
-              child:Column(
-                children: <Widget>[
-                  inputText(txtNotification, "Bildiriminiz"),
-                ],
-              ) ,
-            ),
+            child: chose == null
+                ? Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        inputText(txtNotification, "Bildiriminiz"),
+                      ],
+                    ),
+                  )
+                : Text("Bildirimler"),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -44,14 +50,6 @@ showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
                   SizedBox(
                     height: 10,
                   ),
-                  // Form(
-                  //   key: _formKey,
-                  //   child:Column(
-                  //     children: <Widget>[
-                  //       inputText(txtNotification, "Bildiriminiz"),
-                  //     ],
-                  //   ) ,
-                  // ),
                   listNotification(userWorkplace.key),
                 ],
               ),
@@ -60,97 +58,110 @@ showToNotification(BuildContext context,UserWorkplace userWorkplace) async{
           actions: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width,
-              alignment:Alignment.center,
-              child:  Row(
+              alignment: Alignment.center,
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 //crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   new FlatButton(
-                      child:const Text('İptal'),
+                      child: const Text('İptal'),
                       onPressed: () {
                         Navigator.pop(context);
                       }),
-                  new FlatButton(
-                      child:const Text('Kayıt'),
-                      onPressed: () {
-                        if(_formKey.currentState.validate()){
-                          add(context,userWorkplace.key,userWorkplace.user.name,txtNotification.text);
-                          Navigator.pop(context);
-                        }
+                  Visibility(
+                    visible: chose==null?true:false,
+                    child:new FlatButton(
+                        child: const Text('Kayıt'),
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            add(context, userWorkplace.key,
+                                userWorkplace.user.name, txtNotification.text);
+                            Navigator.pop(context);
+                          }
+                        }),
+                  ),
 
-                      }),
                 ],
               ),
             ),
           ],
         );
-      }
-  );
+      });
 }
 
-Widget listNotification(String userWorkplaceKey){
-  List<Notice> notification=new List();
-  _database.reference().child("notification")
+Widget listNotification(String userWorkplaceKey) {
+  List<Notice> notification = new List();
+  _database
+      .reference()
+      .child("notification")
       .orderByChild("userWorkplace")
       .equalTo(userWorkplaceKey)
-      .once().then((DataSnapshot snapshot){
-    if(snapshot.value!=null){
-      Map<dynamic, dynamic> values=snapshot.value;
-      values.forEach((k,v) {
-        notification.add(Notice(v["userWorkplace"],v["userName"],v["notification"],v["time"]));
+      .once()
+      .then((DataSnapshot snapshot) {
+    if (snapshot.value != null) {
+      Map<dynamic, dynamic> values = snapshot.value;
+      values.forEach((k, v) {
+        notification.add(Notice(
+            v["userWorkplace"], v["userName"], v["notification"], v["time"]));
       });
     }
-
   });
 
-  Future<String> callAsyncFetch()=>Future.delayed(Duration(seconds:1),()=>
-      notification.length.toString()
-  );
-
-
+  Future<String> callAsyncFetch() => Future.delayed(
+      Duration(seconds: 1), () => notification.length.toString());
 
   return FutureBuilder<String>(
       future: callAsyncFetch(),
       builder: (context, AsyncSnapshot<String> snapshot) {
         //print(snapshot.data);
-        if (snapshot.data!="0") {
+        if (snapshot.data != "0") {
           return ListView.builder(
               primary: false,
               shrinkWrap: true,
               itemCount: notification.length,
-              itemBuilder: (BuildContext context,int position){
+              itemBuilder: (BuildContext context, int position) {
                 return ListTile(
                   title: Text(notification[position].notification),
-                  subtitle: Text(notification[position].userName + " - "+notification[position].time ,style: TextStyle(fontSize: 12),),
+                  subtitle: Text(
+                    notification[position].userName +
+                        " - " +
+                        notification[position].time,
+                    style: TextStyle(fontSize: 12),
+                  ),
                 );
-
               });
         } else {
           return ListTile(
-            subtitle: Text("Henüz bildirimde bulunmadınız.",style:TextStyle(fontSize: 12) ,),
+            subtitle: Text(
+              "Henüz bildirimde bulunmadınız.",
+              style: TextStyle(fontSize: 12),
+            ),
           );
         }
       });
-
-
 }
-
-
-
-
 
 ///Save notification
 ///userWorkPlace add to Notification as Key on Realtime Database
-add(BuildContext context,String userWorkplaceKey,String userName,String not){
-  try{
-    String time=DateTime.now().day.toString() +"/"+DateTime.now().month.toString()+ "/"+ DateTime.now().year.toString();
-    Notice notification=new Notice(userWorkplaceKey, userName, not, time);
-    _database.reference().child("notification").push().set(notification.toJson()).then((_){
-    }).catchError((error){
+add(BuildContext context, String userWorkplaceKey, String userName,
+    String not) {
+  try {
+    String time = DateTime.now().day.toString() +
+        "/" +
+        DateTime.now().month.toString() +
+        "/" +
+        DateTime.now().year.toString();
+    Notice notification = new Notice(userWorkplaceKey, userName, not, time);
+    _database
+        .reference()
+        .child("notification")
+        .push()
+        .set(notification.toJson())
+        .then((_) {})
+        .catchError((error) {
       showToAlert(context, error.toString());
     });
-  }catch(error){
+  } catch (error) {
     saveToLog(error.toString());
   }
-
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:workplace_opinion_app/dialogs/showToNotification.dart';
 import 'package:workplace_opinion_app/models/userWorkplace.dart';
 
 class AllWorkplaceAppointed extends StatefulWidget {
@@ -116,7 +116,7 @@ class AllWorkplaceAppointedState extends State<AllWorkplaceAppointed> {
                                   _foundWorkplace[position].period),
                               onTap: () {
                                 //print("Seçildi");
-                                //showToNotification(context,_appointedWorkplaceList[position]);
+                                showToNotification(context,_appointedWorkplaceList[position],0);
                               },
                             ),
                           );
