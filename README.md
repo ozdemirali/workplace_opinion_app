@@ -209,7 +209,7 @@ Realtime Database of Firebase is user on this project.
 
 ## Screens are below
 ![Giriş Sayfası](https://user-images.githubusercontent.com/20681737/119271317-be65c400-bc09-11eb-8f90-53bc0363235f.png)
-![Kişiye Atanmış Stajerler](https://user-images.githubusercontent.com/20681737/119271324-c45ba500-bc09-11eb-87c4-8b3d70b8e587.png)
+![Kişiye Atanmış Stajerler](https://user-images.githubusercontent.com/20681737/119271906-55338000-bc0c-11eb-92d7-1a619b4eb793.png)
 ![İşyerine hakkında Bildirim Bırakma](https://user-images.githubusercontent.com/20681737/119271329-c9205900-bc09-11eb-93c9-8b245e3109f6.png)
 ![Eğitim Öğretim Yılı İçinde Atanmış Tüm Stajerler](https://user-images.githubusercontent.com/20681737/119271338-d1789400-bc09-11eb-9164-3de268e5aab9.png)
 ![Yeni Stajer Atama](https://user-images.githubusercontent.com/20681737/119271344-d76e7500-bc09-11eb-8931-cbaa3a28c13f.png)
