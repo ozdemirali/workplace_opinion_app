@@ -208,6 +208,17 @@ Realtime Database of Firebase is user on this project.
 }
 
 ## Screens are below
+![Giriş Sayfası](https://user-images.githubusercontent.com/20681737/119271317-be65c400-bc09-11eb-8f90-53bc0363235f.png)
+![Kişiye Atanmış Stajerler](https://user-images.githubusercontent.com/20681737/119271324-c45ba500-bc09-11eb-87c4-8b3d70b8e587.png)
+![İşyerine hakkında Bildirim Bırakma](https://user-images.githubusercontent.com/20681737/119271329-c9205900-bc09-11eb-93c9-8b245e3109f6.png)
+![Eğitim Öğretim Yılı İçinde Atanmış Tüm Stajerler](https://user-images.githubusercontent.com/20681737/119271338-d1789400-bc09-11eb-9164-3de268e5aab9.png)
+![Yeni Stajer Atama](https://user-images.githubusercontent.com/20681737/119271344-d76e7500-bc09-11eb-8931-cbaa3a28c13f.png)
+![İşyerleri](https://user-images.githubusercontent.com/20681737/119271351-d9d0cf00-bc09-11eb-92ee-761f1c31ba10.png)
+![İşyeri Ekleme](https://user-images.githubusercontent.com/20681737/119271358-dccbbf80-bc09-11eb-9102-797f90e2836e.png)
+![Stajer Atanmış Tüm İşyerleri](https://user-images.githubusercontent.com/20681737/119271367-e2c1a080-bc09-11eb-8065-958f0681765e.png)
+![Eklenmiş Tüm Bildirimler](https://user-images.githubusercontent.com/20681737/119271446-392edf00-bc0a-11eb-94bb-7c8d699599ce.png)
+
+
 
 A few resources to get you started if this is your first Flutter project:
 
