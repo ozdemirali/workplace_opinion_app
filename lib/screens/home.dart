@@ -53,7 +53,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin{
    //This function set floatButton according to tabController.index
    _printLatestValue() {
     setState(() {
-      if(tabController.index==0){
+      if(tabController.index==0 || tabController.index==3){
         floatButton=false;
       }
       else{
