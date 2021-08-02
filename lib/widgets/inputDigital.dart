@@ -11,7 +11,7 @@ Widget inputDigital(TextEditingController txtDigital,String hinText,String label
       maskFormatter,
     ],
     decoration: InputDecoration(
-      hintText: "0 (999) 999 99 99",
+      hintText: hinText,
       hintStyle: TextStyle(fontSize:12),
       labelText: label,
     ),
